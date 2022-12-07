@@ -213,7 +213,7 @@ public class AccountService : IAccountService
 
     public async Task<IEnumerable<AccountResponse>> GetAll()
     {
-        var accounts = _context.Accounts.Include(a => a.Trades);
+        var accounts = _context.Accounts;
         return _mapper.Map<IList<AccountResponse>>(accounts);
     }
 

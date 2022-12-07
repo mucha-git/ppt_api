@@ -27,8 +27,4 @@ public class RegisterRequest
 
     [Range(typeof(bool), "true", "true")]
     public bool AcceptTerms { get; set; }
-
-
-    public int? TradeAccountId { get; set; }
-    public int? Multiplier { get; set; }
 }

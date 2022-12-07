@@ -2,11 +2,9 @@
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using WebApi.Authorization;
-using WebApi.Factories;
 using WebApi.Helpers;
 using WebApi.Repositories;
 using WebApi.Services;
-using WebApi.SignalR.FrontClientHub;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,16 +60,11 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IJwtUtils, JwtUtils>();
     services.AddScoped<IAccountService, AccountService>();
     services.AddScoped<IEmailService, EmailService>();
-    services.AddScoped<ITradeService, TradeService>();
-    services.AddScoped<IFrontClientSignalRService, FrontClientSignalRService>();
-
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();
-    services.AddScoped<ITradeRepository, TradeRepository>();
 
     // Factories
-    services.AddScoped<ITradeFactory, TradeFactory>();
 
 }
 
@@ -110,7 +103,6 @@ var app = builder.Build();
     app.UseMiddleware<JwtMiddleware>();
 
     app.MapControllers();
-    app.MapHub<FrontClientHub>("/hubs/frontClient");
 
 }
 app.Run();

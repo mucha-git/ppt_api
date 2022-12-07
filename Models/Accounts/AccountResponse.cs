@@ -1,5 +1,3 @@
-using WebApi.Models.Trade;
-
 namespace WebApi.Models.Accounts;
 
 public class AccountResponse
@@ -13,7 +11,4 @@ public class AccountResponse
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
     public bool IsVerified { get; set; }
-    public int? TradeAccountId { get; set; }
-    public int? Multiplier { get; set; }
-    public List<TradeResponse> Trades { get; set; }
 }

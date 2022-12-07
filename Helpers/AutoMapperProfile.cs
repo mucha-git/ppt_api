@@ -3,7 +3,6 @@ namespace WebApi.Helpers;
 using AutoMapper;
 using WebApi.Entities;
 using WebApi.Models.Accounts;
-using WebApi.Models.Trade;
 
 public class AutoMapperProfile : Profile
 {
@@ -32,9 +31,5 @@ public class AutoMapperProfile : Profile
                     return true;
                 }
             ));
-
-        CreateMap<TradeRequest, Trade>().ReverseMap();
-
-        CreateMap<TradeResponse, Trade>().ReverseMap();
     }
 }

@@ -5,8 +5,6 @@ namespace WebApi.Helpers;
 public class DataContext : DbContext
 {
     public DbSet<Account> Accounts { get; set; }
-    public DbSet<Trade> Trades { get; set; }
-
 
     private readonly IConfiguration Configuration;
 

@@ -41,9 +41,6 @@ public class UpdateRequest
         get => _confirmPassword;
         set => _confirmPassword = replaceEmptyWithNull(value);
     }
-    public int? TradeAccountId { get; set; }
-    public int? Multiplier { get; set; }
-
 
     // helpers
 

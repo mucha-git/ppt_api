@@ -29,8 +29,4 @@ public class CreateRequest
     [Required]
     [Compare("Password")]
     public string ConfirmPassword { get; set; }
-
-
-    public int? TradeAccountId { get; set; }
-    public int? Multiplier { get; set; }
 }

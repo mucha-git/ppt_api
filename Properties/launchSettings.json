@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WebApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:52170;http://localhost:52171",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

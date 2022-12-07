@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAimFemBQOC0qA29GR8N5drgAAAAACAAAAAAADZgAAwAAAABAAAADkbYcTaMpvLKjOXmI7IYZVAAAAAASAAACgAAAAEAAAAEqi5zorgIraaKhXQup5uE4oAAAA3e6zyn1oK3UwEtpAN7DLbcyEfxJT70vzlEd1Qjd84Ip4VrTB0OP9xhQAAABGDmJc/D6zLuxm+n26a1BKI6tuOw==</EncryptedPassword>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <History>False|2022-09-28T10:51:10.9631554Z;False|2022-09-28T10:25:07.3943137+02:00;True|2022-09-27T22:52:53.6766495+02:00;True|2022-09-27T22:40:27.5197010+02:00;False|2022-09-27T22:39:36.6467009+02:00;False|2022-09-27T22:39:10.5456604+02:00;True|2022-09-19T17:10:37.0342822+02:00;True|2022-09-19T15:46:50.4163113+02:00;True|2022-09-19T12:51:46.9795053+02:00;False|2022-09-19T12:49:09.4529132+02:00;</History>
+    <LastFailureDetails>2022-09-28T10:51:10.9631554Z|checkContainerPrereq</LastFailureDetails>
+  </PropertyGroup>
+</Project>

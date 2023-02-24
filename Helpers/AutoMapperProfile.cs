@@ -3,6 +3,9 @@ namespace WebApi.Helpers;
 using AutoMapper;
 using WebApi.Entities;
 using WebApi.Models.Accounts;
+using WebApi.Models.Elements;
+using WebApi.Models.Maps;
+using WebApi.Models.Views;
 
 public class AutoMapperProfile : Profile
 {
@@ -31,5 +34,21 @@ public class AutoMapperProfile : Profile
                     return true;
                 }
             ));
+
+        CreateMap<CreateViewRequest, Views>();
+
+        CreateMap<UpdateViewRequest, Views>();
+
+        CreateMap<CreateElementRequest, Elements>();
+
+        CreateMap<UpdateElementRequest, Elements>();
+
+        CreateMap<CreateMapRequest, Maps>();
+        CreateMap<CreateCoordinateRequest, Coordinates>();
+        CreateMap<CreateMarkerRequest, Markers>();
+
+        CreateMap<UpdateMapRequest, Maps>();
+        CreateMap<UpdateCoordinateRequest, Coordinates>();
+        CreateMap<UpdateMarkerRequest, Markers>();
     }
 }

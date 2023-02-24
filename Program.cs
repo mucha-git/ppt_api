@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using WebApi.Authorization;
+using WebApi.Factories;
 using WebApi.Helpers;
 using WebApi.Repositories;
 using WebApi.Services;
@@ -22,7 +23,8 @@ var builder = WebApplication.CreateBuilder(args);
     {
         // serialize enums as strings in api responses (e.g. Role)
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+    }).AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddSwaggerGen(c =>
     {
@@ -55,17 +57,28 @@ var builder = WebApplication.CreateBuilder(args);
     });
     // configure strongly typed settings object
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
+    services.AddHttpContextAccessor();
     // configure DI for application services
     services.AddScoped<IJwtUtils, JwtUtils>();
     services.AddScoped<IAccountService, AccountService>();
+    services.AddScoped<IAccount, AccountService>();
     services.AddScoped<IEmailService, EmailService>();
+    services.AddScoped<IYearsService, YearsService>();
+    services.AddScoped<IViewsService, ViewsService>();
+    services.AddScoped<IElementsService, ElementsService>();
+    services.AddScoped<IMapsService, MapsService>();
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();
+    services.AddScoped<IYearsRepository, YearsRepository>();
+    services.AddScoped<IViewsRepository, ViewsRepository>();
+    services.AddScoped<IElementsRepository, ElementsRepository>();
+    services.AddScoped<IMapsRepository, MapsRepository>();
 
     // Factories
-
+    services.AddScoped<IViewsFactory, ViewsFactory>();
+    services.AddScoped<IElementsFactory, ElementsFactory>();
+    services.AddScoped<IMapsFactory, MapsFactory>();
 }
 
 var app = builder.Build();

@@ -31,26 +31,35 @@ public interface IAccountService
     void Delete(int id);
 }
 
-public class AccountService : IAccountService
+public interface IAccount
+    {
+        Account Account { get; }
+    }
+
+public class AccountService : IAccountService, IAccount
 {
     private readonly DataContext _context;
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
     private readonly IEmailService _emailService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public Account Account => (Account)_httpContextAccessor.HttpContext.Items["Account"];
 
     public AccountService(
         DataContext context,
         IJwtUtils jwtUtils,
         IMapper mapper,
         IOptions<AppSettings> appSettings,
-        IEmailService emailService)
+        IEmailService emailService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _jwtUtils = jwtUtils;
         _mapper = mapper;
         _appSettings = appSettings.Value;
         _emailService = emailService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress)
@@ -213,7 +222,7 @@ public class AccountService : IAccountService
 
     public async Task<IEnumerable<AccountResponse>> GetAll()
     {
-        var accounts = _context.Accounts;
+        var accounts = await _context.Accounts.ToListAsync();
         return _mapper.Map<IList<AccountResponse>>(accounts);
     }
 

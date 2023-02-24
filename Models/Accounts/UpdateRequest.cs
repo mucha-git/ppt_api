@@ -1,7 +1,7 @@
 namespace WebApi.Models.Accounts;
 
 using System.ComponentModel.DataAnnotations;
-using WebApi.Entities;
+using WebApi.Helpers;
 
 public class UpdateRequest
 {
@@ -13,6 +13,7 @@ public class UpdateRequest
     public string Title { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public int? PilgrimageId { get; set; }
 
     [EnumDataType(typeof(Role))]
     public string Role

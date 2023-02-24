@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApi.Helpers;
 
 namespace WebApi.Entities;
 
@@ -27,6 +28,9 @@ public class Account
     public DateTime? PasswordReset { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
+
+    public int? PilgrimageId { get; set; }
+    public Pilgrimages Pilgrimage { get; set; }
     public List<RefreshToken> RefreshTokens { get; set; }
 
     public bool OwnsToken(string token)

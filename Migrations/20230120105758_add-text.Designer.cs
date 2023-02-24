@@ -3,6 +3,7 @@ using System;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Helpers;
 
@@ -11,9 +12,10 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230120105758_add-text")]
+    partial class addtext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +125,9 @@ namespace WebApi.Migrations
                     b.Property<int?>("MapId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MapSrc")
+                        .HasColumnType("varchar(500)");
+
                     b.Property<int?>("Margin")
                         .HasColumnType("INTEGER");
 
@@ -199,9 +204,6 @@ namespace WebApi.Migrations
 
                     b.Property<double>("Longitude")
                         .HasColumnType("DOUBLE PRECISION");
-
-                    b.Property<string>("MapSrc")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)");

@@ -3,6 +3,7 @@ using System;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Helpers;
 
@@ -11,9 +12,10 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230108202954_latitude")]
+    partial class latitude
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,7 +95,12 @@ namespace WebApi.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("DOUBLE PRECISION");
 
+                    b.Property<int>("MapId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MapId");
 
                     b.ToTable("Coordinates");
                 });
@@ -123,6 +130,9 @@ namespace WebApi.Migrations
                     b.Property<int?>("MapId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MapSrc")
+                        .HasColumnType("varchar(500)");
+
                     b.Property<int?>("Margin")
                         .HasColumnType("INTEGER");
 
@@ -130,7 +140,7 @@ namespace WebApi.Migrations
                         .HasColumnType("varchar(1000)");
 
                     b.Property<string>("Text")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
@@ -200,15 +210,6 @@ namespace WebApi.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("DOUBLE PRECISION");
 
-                    b.Property<string>("MapSrc")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<string>("Polylines")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
-
                     b.Property<string>("Provider")
                         .HasColumnType("varchar(50)");
 
@@ -250,7 +251,7 @@ namespace WebApi.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("DOUBLE PRECISION");
 
-                    b.Property<int?>("MapsId")
+                    b.Property<int>("MapId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PinId")
@@ -264,7 +265,9 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MapsId");
+                    b.HasIndex("MapId");
+
+                    b.HasIndex("PinId");
 
                     b.ToTable("Markers");
                 });
@@ -416,14 +419,25 @@ namespace WebApi.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
+            modelBuilder.Entity("WebApi.Entities.Coordinates", b =>
+                {
+                    b.HasOne("WebApi.Entities.Maps", "Map")
+                        .WithMany("Polylines")
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Map");
+                });
+
             modelBuilder.Entity("WebApi.Entities.Elements", b =>
                 {
                     b.HasOne("WebApi.Entities.Maps", "Map")
-                        .WithMany()
+                        .WithMany("Elements")
                         .HasForeignKey("MapId");
 
                     b.HasOne("WebApi.Entities.Views", "View")
-                        .WithMany()
+                        .WithMany("Elements")
                         .HasForeignKey("ViewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -465,9 +479,21 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Entities.Markers", b =>
                 {
-                    b.HasOne("WebApi.Entities.Maps", null)
+                    b.HasOne("WebApi.Entities.Maps", "Map")
                         .WithMany("Markers")
-                        .HasForeignKey("MapsId");
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Entities.MapPins", "Pin")
+                        .WithMany("Markers")
+                        .HasForeignKey("PinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Map");
+
+                    b.Navigation("Pin");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Views", b =>
@@ -498,9 +524,18 @@ namespace WebApi.Migrations
                     b.Navigation("Pilgrimage");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.Maps", b =>
+            modelBuilder.Entity("WebApi.Entities.MapPins", b =>
                 {
                     b.Navigation("Markers");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Maps", b =>
+                {
+                    b.Navigation("Elements");
+
+                    b.Navigation("Markers");
+
+                    b.Navigation("Polylines");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Pilgrimages", b =>
@@ -512,6 +547,8 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Entities.Views", b =>
                 {
+                    b.Navigation("Elements");
+
                     b.Navigation("ViewsList");
                 });
 

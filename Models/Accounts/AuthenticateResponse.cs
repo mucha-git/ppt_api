@@ -12,6 +12,7 @@ public class AuthenticateResponse
     public string Role { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
+    public int? PilgrimageId { get; set; }
     public bool IsVerified { get; set; }
     public string JwtToken { get; set; }
 

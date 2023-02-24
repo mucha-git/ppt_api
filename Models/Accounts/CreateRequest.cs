@@ -1,7 +1,7 @@
 namespace WebApi.Models.Accounts;
 
 using System.ComponentModel.DataAnnotations;
-using WebApi.Entities;
+using WebApi.Helpers;
 
 public class CreateRequest
 {
@@ -29,4 +29,5 @@ public class CreateRequest
     [Required]
     [Compare("Password")]
     public string ConfirmPassword { get; set; }
+    public int? PilgrimageId { get; set; }
 }

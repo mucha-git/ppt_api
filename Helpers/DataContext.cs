@@ -5,6 +5,14 @@ namespace WebApi.Helpers;
 public class DataContext : DbContext
 {
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Coordinates> Coordinates { get; set; }
+    public DbSet<Elements> Elements { get; set; }
+    public DbSet<MapPins> MapPins { get; set; }
+    public DbSet<Maps> Maps { get; set; }
+    public DbSet<Markers> Markers { get; set; }
+    public DbSet<Pilgrimages> Pilgrimages { get; set; }
+    public DbSet<Views> Views { get; set; }
+    public DbSet<Years> Years { get; set; }
 
     private readonly IConfiguration Configuration;
 

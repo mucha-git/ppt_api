@@ -3,6 +3,7 @@ using System;
 using FirebirdSql.EntityFrameworkCore.Firebird.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Helpers;
 
@@ -11,9 +12,10 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230109133055_entities5")]
+    partial class entities5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,7 +95,12 @@ namespace WebApi.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("DOUBLE PRECISION");
 
+                    b.Property<int?>("MapsId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MapsId");
 
                     b.ToTable("Coordinates");
                 });
@@ -123,6 +130,9 @@ namespace WebApi.Migrations
                     b.Property<int?>("MapId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MapSrc")
+                        .HasColumnType("varchar(500)");
+
                     b.Property<int?>("Margin")
                         .HasColumnType("INTEGER");
 
@@ -130,7 +140,7 @@ namespace WebApi.Migrations
                         .HasColumnType("varchar(1000)");
 
                     b.Property<string>("Text")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
@@ -138,7 +148,7 @@ namespace WebApi.Migrations
                     b.Property<int>("ViewId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("YearId")
+                    b.Property<int?>("YearsId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("mapHeight")
@@ -150,7 +160,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("ViewId");
 
-                    b.HasIndex("YearId");
+                    b.HasIndex("YearsId");
 
                     b.ToTable("Elements");
                 });
@@ -200,14 +210,8 @@ namespace WebApi.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("DOUBLE PRECISION");
 
-                    b.Property<string>("MapSrc")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
-
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)");
-
-                    b.Property<string>("Polylines")
-                        .HasColumnType("BLOB SUB_TYPE TEXT");
 
                     b.Property<string>("Provider")
                         .HasColumnType("varchar(50)");
@@ -265,6 +269,8 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MapsId");
+
+                    b.HasIndex("PinId");
 
                     b.ToTable("Markers");
                 });
@@ -416,6 +422,13 @@ namespace WebApi.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
+            modelBuilder.Entity("WebApi.Entities.Coordinates", b =>
+                {
+                    b.HasOne("WebApi.Entities.Maps", null)
+                        .WithMany("Polylines")
+                        .HasForeignKey("MapsId");
+                });
+
             modelBuilder.Entity("WebApi.Entities.Elements", b =>
                 {
                     b.HasOne("WebApi.Entities.Maps", "Map")
@@ -428,17 +441,13 @@ namespace WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Entities.Years", "Year")
+                    b.HasOne("WebApi.Entities.Years", null)
                         .WithMany("Elements")
-                        .HasForeignKey("YearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("YearsId");
 
                     b.Navigation("Map");
 
                     b.Navigation("View");
-
-                    b.Navigation("Year");
                 });
 
             modelBuilder.Entity("WebApi.Entities.MapPins", b =>
@@ -468,6 +477,14 @@ namespace WebApi.Migrations
                     b.HasOne("WebApi.Entities.Maps", null)
                         .WithMany("Markers")
                         .HasForeignKey("MapsId");
+
+                    b.HasOne("WebApi.Entities.MapPins", "Pin")
+                        .WithMany()
+                        .HasForeignKey("PinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pin");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Views", b =>
@@ -501,6 +518,8 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Entities.Maps", b =>
                 {
                     b.Navigation("Markers");
+
+                    b.Navigation("Polylines");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Pilgrimages", b =>

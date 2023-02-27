@@ -82,7 +82,7 @@ var builder = WebApplication.CreateBuilder(args);
 }
 
 var app = builder.Build();
-
+    app.UseHttpsRedirection();
 // migrate any database changes on startup (includes initial db creation)
 //using (var scope = app.Services.CreateScope())
 //{

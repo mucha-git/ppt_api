@@ -30,6 +30,8 @@ public class Account
     public DateTime? Updated { get; set; }
 
     public int? PilgrimageId { get; set; }
+    [Column(TypeName = "varchar(1000)")]
+    public string Random { get; set; }
     public Pilgrimages Pilgrimage { get; set; }
     public List<RefreshToken> RefreshTokens { get; set; }
 

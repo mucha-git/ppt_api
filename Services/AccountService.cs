@@ -13,16 +13,19 @@ using WebApi.Authorization;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models.Accounts;
+using BC = BCrypt.Net.BCrypt;
 
 public interface IAccountService
 {
-    AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress);
+    Task<GetSaltResponse> GetSalt(GetSaltRequest model);
+    Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress);
     AuthenticateResponse RefreshToken(string token, string ipAddress);
     void RevokeToken(string token, string ipAddress);
     void Register(RegisterRequest model, string origin);
     void VerifyEmail(string token);
     void ForgotPassword(ForgotPasswordRequest model, string origin);
     void ValidateResetToken(ValidateResetTokenRequest model);
+    Task<GetSaltByTokenResponse> GetSaltByToken(GetSaltByTokenRequest model);
     void ResetPassword(ResetPasswordRequest model);
     Task<IEnumerable<AccountResponse>> GetAll();
     AccountResponse GetById(int id);
@@ -62,13 +65,43 @@ public class AccountService : IAccountService, IAccount
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress)
+    public async Task<GetSaltResponse> GetSalt(GetSaltRequest model)
+        {
+            Account account = await _context.Accounts.SingleOrDefaultAsync(a => a.Email == model.email);
+            var random = generateVerificationToken().Substring(0, 20);
+            if (account == null)
+            {
+                //prevent timeAttack
+                return new GetSaltResponse
+                {
+                    Salt = BC.GenerateSalt(11),
+                    Random = random
+                };
+            }
+
+            
+            GetSaltResponse response = new GetSaltResponse
+            {
+                Salt = account.PasswordHash.Substring(0, 29),
+                Random = random
+            };
+            //if (!int.TryParse(model.email, out idKontrah))
+            //{
+            account.Random = random;
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
+            return response;
+        }
+
+    public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress)
     {
         var account = _context.Accounts.SingleOrDefault(x => x.Email == model.Email);
 
         // validate
-        if (account == null || !account.IsVerified || !BCrypt.Verify(model.Password, account.PasswordHash))
+        if (account == null || !account.IsVerified || !BC.Verify(account.PasswordHash + account.Random, model.Password)){
+            if(account != null) await deleteRandom(account);
             throw new AppException("Email or password is incorrect");
+        }
 
         // authentication successful so generate jwt and refresh tokens
         var jwtToken = _jwtUtils.GenerateJwtToken(account);
@@ -206,6 +239,15 @@ public class AccountService : IAccountService, IAccount
         getAccountByResetToken(model.Token);
     }
 
+    public async Task<GetSaltByTokenResponse> GetSaltByToken(GetSaltByTokenRequest model)
+        {
+            var account = await _context.Accounts.SingleOrDefaultAsync(x =>
+                    x.ResetToken == model.Token &&
+                    x.ResetTokenExpires > DateTime.Now);
+
+            return new GetSaltByTokenResponse() { Salt = account != null ? account.PasswordHash.Substring(0, 29) : BC.GenerateSalt(11) };
+        }
+
     public void ResetPassword(ResetPasswordRequest model)
     {
         var account = getAccountByResetToken(model.Token);
@@ -222,7 +264,9 @@ public class AccountService : IAccountService, IAccount
 
     public async Task<IEnumerable<AccountResponse>> GetAll()
     {
-        var accounts = await _context.Accounts.ToListAsync();
+
+        var accounts = Account.Role == Role.Admin? await _context.Accounts.ToListAsync():
+        await _context.Accounts.Where( a => a.PilgrimageId == Account.PilgrimageId).ToListAsync();
         return _mapper.Map<IList<AccountResponse>>(accounts);
     }
 
@@ -447,4 +491,11 @@ public class AccountService : IAccountService, IAccount
                         {message}"
         );
     }
+
+    private async Task deleteRandom(Account account)
+        {
+            account.Random = null;
+            _context.Update(account);
+            await _context.SaveChangesAsync();
+        }
 }

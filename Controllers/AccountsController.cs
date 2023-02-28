@@ -19,11 +19,18 @@ public class AccountsController : BaseController
         _accountService = accountService;
     }
 
+    [HttpPost("getSalt")]
+    public async Task<ActionResult<GetSaltResponse>> GetSalt(GetSaltRequest model)
+    {
+        var response = await _accountService.GetSalt(model);
+        return Ok(response);
+    }
+
     [AllowAnonymous]
     [HttpPost("authenticate")]
-    public ActionResult<AuthenticateResponse> Authenticate(AuthenticateRequest model)
+    public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateRequest model)
     {
-        var response = _accountService.Authenticate(model, ipAddress());
+        var response = await _accountService.Authenticate(model, ipAddress());
         setTokenCookie(response.RefreshToken);
         return Ok(response);
     }
@@ -87,6 +94,13 @@ public class AccountsController : BaseController
         return Ok(new { message = "Token is valid" });
     }
 
+    [HttpPost("getSaltByToken")]
+    public async Task<ActionResult<GetSaltByTokenResponse>> GetSaltByToken(GetSaltByTokenRequest model)
+    {
+        var response = await _accountService.GetSaltByToken(model);
+        return Ok(response);
+    }
+
     [AllowAnonymous]
     [HttpPost("reset-password")]
     public IActionResult ResetPassword(ResetPasswordRequest model)
@@ -95,10 +109,13 @@ public class AccountsController : BaseController
         return Ok(new { message = "Password reset successful, you can now login" });
     }
 
-    [Authorize(Role.Admin)]
+
+
+    [Authorize(Role.Admin, Role.Manager)]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AccountResponse>>> GetAll()
     {
+        
         var accounts = await _accountService.GetAll();
         return Ok(accounts);
     }
@@ -114,7 +131,7 @@ public class AccountsController : BaseController
         return Ok(account);
     }
 
-    [Authorize(Role.Admin)]
+    [Authorize(Role.Admin, Role.Manager)]
     [HttpPost]
     public ActionResult<AccountResponse> Create(CreateRequest model)
     {

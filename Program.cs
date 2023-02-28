@@ -67,6 +67,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IViewsService, ViewsService>();
     services.AddScoped<IElementsService, ElementsService>();
     services.AddScoped<IMapsService, MapsService>();
+    services.AddScoped<IPilgrimagesService, PilgrimagesService>();
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();
@@ -74,11 +75,13 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IViewsRepository, ViewsRepository>();
     services.AddScoped<IElementsRepository, ElementsRepository>();
     services.AddScoped<IMapsRepository, MapsRepository>();
+    services.AddScoped<IPilgrimagesRepository, PilgrimagesRepository>();
 
     // Factories
     services.AddScoped<IViewsFactory, ViewsFactory>();
     services.AddScoped<IElementsFactory, ElementsFactory>();
     services.AddScoped<IMapsFactory, MapsFactory>();
+    services.AddScoped<IPilgrimagesFactory, PilgrimagesFactory>();
 }
 
 var app = builder.Build();

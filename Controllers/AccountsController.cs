@@ -19,6 +19,7 @@ public class AccountsController : BaseController
         _accountService = accountService;
     }
 
+    [AllowAnonymous]
     [HttpPost("getSalt")]
     public async Task<ActionResult<GetSaltResponse>> GetSalt(GetSaltRequest model)
     {
@@ -94,6 +95,7 @@ public class AccountsController : BaseController
         return Ok(new { message = "Token is valid" });
     }
 
+    [AllowAnonymous]
     [HttpPost("getSaltByToken")]
     public async Task<ActionResult<GetSaltByTokenResponse>> GetSaltByToken(GetSaltByTokenRequest model)
     {

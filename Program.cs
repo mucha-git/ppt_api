@@ -28,7 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
         // serialize enums as strings in api responses (e.g. Role)
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }).AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddSwaggerGen(c =>
     {

@@ -34,8 +34,8 @@ public class PilgrimagesRepository : IPilgrimagesRepository
     {
         var ret = pilgrimageId != null? 
             await _context.Pilgrimages
-            .Where(y => y.Id == pilgrimageId).ToListAsync()
-            : await _context.Pilgrimages.ToListAsync();
+            .Where(y => y.Id == pilgrimageId).Include(y => y.Years.OrderByDescending( o => o.Id)).ToListAsync()
+            : await _context.Pilgrimages.Include(y => y.Years.OrderByDescending( o => o.Id)).ToListAsync();
         return ret;
     }
 

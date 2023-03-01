@@ -19,12 +19,16 @@ var builder = WebApplication.CreateBuilder(args);
                               .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
     services.AddCors();
     services.AddSignalR();
+    services.AddStackExchangeRedisCache(options => {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis");
+        options.InstanceName = "Redis_pielgrzymka_";
+    });
     services.AddControllers().AddJsonOptions(x =>
     {
         // serialize enums as strings in api responses (e.g. Role)
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }).AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddSwaggerGen(c =>
     {

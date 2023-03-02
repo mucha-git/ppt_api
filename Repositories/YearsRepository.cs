@@ -38,6 +38,6 @@ public class YearsRepository : IYearsRepository
         var year = await Get(yearId);
         
         string recordKey = $"Year_{yearId}";
-        _cache.SetRecordAsync(recordKey, year).RunSynchronously();
+        await _cache.SetRecordAsync(recordKey, year);
     }
 }

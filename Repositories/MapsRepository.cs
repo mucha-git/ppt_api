@@ -29,7 +29,7 @@ public class MapsRepository : IMapsRepository
     {
         await _context.Maps.AddAsync(model);
         await _context.SaveChangesAsync();
-        _yearsRepository.SaveYearToRedis(model.YearId);
+        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
@@ -45,13 +45,14 @@ public class MapsRepository : IMapsRepository
     {
         _context.Maps.Update(model);
         await _context.SaveChangesAsync();
-        _yearsRepository.SaveYearToRedis(model.YearId);
+        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
     public async Task Delete(Maps model){
         _context.Maps.Remove(model);
         await _context.SaveChangesAsync();
+        await _yearsRepository.SaveYearToRedis(model.YearId);
     }
 
     public async Task<Maps> GetById(int id)

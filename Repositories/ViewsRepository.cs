@@ -18,20 +18,16 @@ public interface IViewsRepository
 public class ViewsRepository : IViewsRepository
 {
     private readonly DataContext _context;
-    
-    private readonly IYearsRepository _yearsRepository;
 
-    public ViewsRepository(DataContext context, IYearsRepository yearsRepository)
+    public ViewsRepository(DataContext context)
     {
         _context = context;
-        _yearsRepository = yearsRepository;
     }
 
     public async Task<Views> Create(Views model)
     {
         await _context.Views.AddAsync(model);
         await _context.SaveChangesAsync();
-         await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
@@ -47,14 +43,12 @@ public class ViewsRepository : IViewsRepository
     {
         _context.Views.Update(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
     public async Task Delete(Views model){
         _context.Views.Remove(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
     }
 
     public async Task<Views> GetById(int id)

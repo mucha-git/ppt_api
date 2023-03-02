@@ -12,8 +12,8 @@ public static class CacheHelper
         {
             var options = new DistributedCacheEntryOptions();
 
-            //options.AbsoluteExpirationRelativeToNow = absoluteExpireTime ?? TimeSpan.FromSeconds(60);
-            //options.SlidingExpiration = slidingExpireTime;
+            options.AbsoluteExpirationRelativeToNow = absoluteExpireTime ?? TimeSpan.FromSeconds(60);
+            options.SlidingExpiration = slidingExpireTime;
             var jsonOptions = new JsonSerializerOptions
             {
                 ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve

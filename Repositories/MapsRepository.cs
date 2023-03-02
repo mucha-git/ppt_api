@@ -17,19 +17,16 @@ public interface IMapsRepository
 public class MapsRepository : IMapsRepository
 {
     private readonly DataContext _context;
-    private readonly IYearsRepository _yearsRepository;
 
-    public MapsRepository(DataContext context, IYearsRepository yearsRepository)
+    public MapsRepository(DataContext context)
     {
         _context = context;
-        _yearsRepository = yearsRepository;
     }
 
     public async Task<Maps> Create(Maps model)
     {
         await _context.Maps.AddAsync(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
@@ -45,14 +42,12 @@ public class MapsRepository : IMapsRepository
     {
         _context.Maps.Update(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
     public async Task Delete(Maps model){
         _context.Maps.Remove(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
     }
 
     public async Task<Maps> GetById(int id)

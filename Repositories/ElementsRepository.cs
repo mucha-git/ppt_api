@@ -17,19 +17,16 @@ public interface IElementsRepository
 public class ElementsRepository : IElementsRepository
 {
     private readonly DataContext _context;
-    private readonly IYearsRepository _yearsRepository;
 
-    public ElementsRepository(DataContext context, IYearsRepository yearsRepository)
+    public ElementsRepository(DataContext context)
     {
         _context = context;
-        _yearsRepository = yearsRepository;
     }
 
     public async Task<Elements> Create(Elements model)
     {
         await _context.Elements.AddAsync(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
@@ -45,14 +42,12 @@ public class ElementsRepository : IElementsRepository
     {
         _context.Elements.Update(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
     public async Task Delete(Elements model){
         _context.Elements.Remove(model);
         await _context.SaveChangesAsync();
-        await _yearsRepository.SaveYearToRedis(model.YearId);
     }
 
     public async Task<Elements> GetById(int id)

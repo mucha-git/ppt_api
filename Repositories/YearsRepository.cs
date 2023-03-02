@@ -18,10 +18,10 @@ public class YearsRepository : IYearsRepository
         _context = context;
     }
 
-    public async Task<Years> Get(int pilgrimageId, int year)
+    public async Task<Years> Get(int pilgrimageId, int yearId)
     {
         return await _context.Years
-            .Where(y => y.PilgrimageId == pilgrimageId && y.Year == year)
+            .Where(y => y.PilgrimageId == pilgrimageId && y.Id == yearId)
             .Include(e => e.Elements)
             .Include(v => v.Views)
             .Include(mp => mp.MapPins)

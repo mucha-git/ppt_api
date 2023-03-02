@@ -31,7 +31,7 @@ public class ViewsRepository : IViewsRepository
     {
         await _context.Views.AddAsync(model);
         await _context.SaveChangesAsync();
-        _yearsRepository.SaveYearToRedis(model.YearId).RunSynchronously();
+        _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
@@ -47,7 +47,7 @@ public class ViewsRepository : IViewsRepository
     {
         _context.Views.Update(model);
         await _context.SaveChangesAsync();
-        _yearsRepository.SaveYearToRedis(model.YearId).RunSynchronously();
+        _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 

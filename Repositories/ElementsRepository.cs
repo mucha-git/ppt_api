@@ -29,7 +29,7 @@ public class ElementsRepository : IElementsRepository
     {
         await _context.Elements.AddAsync(model);
         await _context.SaveChangesAsync();
-        _yearsRepository.SaveYearToRedis(model.YearId).RunSynchronously();
+        _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 
@@ -45,7 +45,7 @@ public class ElementsRepository : IElementsRepository
     {
         _context.Elements.Update(model);
         await _context.SaveChangesAsync();
-        _yearsRepository.SaveYearToRedis(model.YearId).RunSynchronously();
+        _yearsRepository.SaveYearToRedis(model.YearId);
         return model;
     }
 

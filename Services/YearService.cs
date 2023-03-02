@@ -5,7 +5,7 @@ using WebApi.Repositories;
 
 public interface IYearsService
 {
-    Task<Years> GetData(int pilgrimageId, int yearId);
+    Task<Years> GetData(int yearId);
 }
 
 public class YearsService : IYearsService
@@ -16,8 +16,8 @@ public class YearsService : IYearsService
         _yearsRepository = yearsRepository;
     }
 
-    public async Task<Years> GetData(int pilgrimageId, int yearId)
+    public async Task<Years> GetData(int yearId)
     {
-        return await _yearsRepository.Get(pilgrimageId, yearId);
+        return await _yearsRepository.Get(yearId);
     }
 }

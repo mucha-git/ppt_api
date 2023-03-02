@@ -27,11 +27,11 @@ public class AppController : BaseController
     public async Task<ActionResult> GetYearData(GetYearDataRequest request)
     {
         Years years;
-        string recordKey = $"Pilgrimage_{request.PilgrimageId}_Year_{request.YearId}";
+        string recordKey = $"Year_{request.YearId}";
         years = await _cache.GetRecordAsync<Years>(recordKey);
         if (years is null) // Data not available in the Cache
             {
-                years = await _yearsService.GetData(request.PilgrimageId, request.YearId);
+                years = await _yearsService.GetData(request.YearId);
                 await _cache.SetRecordAsync(recordKey, years);
             }
             

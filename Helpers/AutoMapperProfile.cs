@@ -4,6 +4,7 @@ using AutoMapper;
 using WebApi.Entities;
 using WebApi.Models.Accounts;
 using WebApi.Models.Elements;
+using WebApi.Models.MapPins;
 using WebApi.Models.Maps;
 using WebApi.Models.Pilgrimages;
 using WebApi.Models.Views;
@@ -48,10 +49,12 @@ public class AutoMapperProfile : Profile
         CreateMap<CreateCoordinateRequest, Coordinates>();
         CreateMap<CreateMarkerRequest, Markers>();
         CreateMap<CreatePilgrimageRequest, Pilgrimages>();
+        CreateMap<CreateMapPinRequest, MapPins>();
 
         CreateMap<UpdateMapRequest, Maps>();
         CreateMap<UpdateCoordinateRequest, Coordinates>();
         CreateMap<UpdateMarkerRequest, Markers>();
         CreateMap<UpdatePilgrimageRequest, Pilgrimages>();
+        CreateMap<UpdateMapPinRequest, MapPins>();
     }
 }

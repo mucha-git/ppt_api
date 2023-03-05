@@ -5,6 +5,8 @@ namespace WebApi.Entities;
 public class MapPins
 {
     public int Id { get; set; }
+    [Column(TypeName = "varchar(250)")]
+    public string Name { get; set; }
     
     [Column(TypeName = "varchar(1000)")]
     public string PinSrc { get; set; }

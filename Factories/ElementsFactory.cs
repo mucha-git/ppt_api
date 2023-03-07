@@ -28,7 +28,7 @@ namespace WebApi.Factories
         public Elements Create(CreateElementRequest model)
         {
             var response = _mapper.Map<Elements>(model);
-            if(response.Text != null) response.Text = response.Text.Replace('\n', 'n');
+            if(response.Text != null) response.Text = response.Text;//.Replace('\n', '');
             return response;
         }
     }

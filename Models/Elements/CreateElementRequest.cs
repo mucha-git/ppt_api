@@ -39,6 +39,7 @@ public class CreateElementRequest {
     public int? DestinationViewId { get; set; }
     #endregion
 
+    public int? Order {get; set;}
     public int ViewId { get; set; }
 
     public int YearId { get; set; }

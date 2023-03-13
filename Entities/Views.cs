@@ -22,6 +22,7 @@ public class Views
 
     [Column(TypeName = "varchar(1000)")]
     public string ImgSrc { get; set; }
+    public int? Order {get; set;}
 
     public int YearId { get; set; }
     public Years Year { get; set; }

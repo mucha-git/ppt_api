@@ -29,6 +29,10 @@ namespace WebApi.Factories
         {
             var response = _mapper.Map<Elements>(model);
             if(response.Text != null) response.Text = response.Text;//.Replace('\n', '');
+            if(response.Order == null){
+                var lastelement = _context.Elements.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId).OrderBy( o => o.Order).LastOrDefault();  
+                response.Order = lastelement != null? lastelement.Order + 1 : 1;  
+            }
             return response;
         }
     }

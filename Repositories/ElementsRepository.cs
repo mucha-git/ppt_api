@@ -25,6 +25,9 @@ public class ElementsRepository : IElementsRepository
 
     public async Task<Elements> Create(Elements model)
     {
+        foreach(var element in await _context.Elements.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId && v.Order >= model.Order).ToListAsync()){
+            element.Order = element.Order + 1;
+        }
         await _context.Elements.AddAsync(model);
         await _context.SaveChangesAsync();
         return model;
@@ -40,6 +43,16 @@ public class ElementsRepository : IElementsRepository
 
     public async Task<Elements> Update(Elements model)
     {
+        var oldOrder = _context.Elements.AsNoTracking().First(v => v.Id == model.Id).Order;
+        if(model.Order < oldOrder){
+            foreach(var element in await _context.Elements.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId && v.Order >= model.Order && v.Order < oldOrder).ToListAsync()){
+                element.Order = element.Order + 1;
+            }
+        } else if(model.Order > oldOrder){
+            foreach(var element in await _context.Elements.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId && v.Order <= model.Order && v.Order > oldOrder).ToListAsync()){
+                element.Order = element.Order - 1;
+            }
+        }
         _context.Elements.Update(model);
         await _context.SaveChangesAsync();
         return model;

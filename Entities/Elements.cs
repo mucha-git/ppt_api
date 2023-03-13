@@ -41,8 +41,10 @@ public class Elements
 
     #region Navigation
     public int? DestinationViewId { get; set; }
+
     #endregion
     
+     public int? Order {get; set;}
     public int ViewId { get; set; }
     public Views View {get; set;}
 

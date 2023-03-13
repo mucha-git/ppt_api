@@ -27,6 +27,10 @@ namespace WebApi.Factories
         public Views Create(CreateViewRequest model)
         {
             var response = _mapper.Map<Views>(model);
+            if(response.Order == null){
+                var lastView = _context.Views.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId).OrderBy( o => o.Order).LastOrDefault();  
+                response.Order = lastView != null? lastView.Order + 1 : 1;  
+            }
             return response;
         }
     }

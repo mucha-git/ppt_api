@@ -26,6 +26,9 @@ public class ViewsRepository : IViewsRepository
 
     public async Task<Views> Create(Views model)
     {
+        foreach(var view in await _context.Views.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId && v.Order >= model.Order).ToListAsync()){
+            view.Order = view.Order + 1;
+        }
         await _context.Views.AddAsync(model);
         await _context.SaveChangesAsync();
         return model;
@@ -35,12 +38,22 @@ public class ViewsRepository : IViewsRepository
     {
         var ret = await _context.Years
             .Where(y => y.PilgrimageId == pilgrimageId && y.Id == id)
-            .Include(v => v.Views).FirstOrDefaultAsync();
+            .Include(v => v.Views.OrderBy(o => o.Order)).FirstOrDefaultAsync();
         return ret==null? null : ret.Views;
     }
 
     public async Task<Views> Update(Views model)
     {
+        var oldOrder = _context.Views.AsNoTracking().First(v => v.Id == model.Id).Order;
+        if(model.Order < oldOrder){
+            foreach(var view in await _context.Views.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId && v.Order >= model.Order && v.Order < oldOrder).ToListAsync()){
+                view.Order = view.Order + 1;
+            }
+        } else if(model.Order > oldOrder){
+            foreach(var view in await _context.Views.Where(v => v.YearId == model.YearId && v.ViewId == model.ViewId && v.Order <= model.Order && v.Order > oldOrder).ToListAsync()){
+                view.Order = view.Order - 1;
+            }
+        }
         _context.Views.Update(model);
         await _context.SaveChangesAsync();
         return model;

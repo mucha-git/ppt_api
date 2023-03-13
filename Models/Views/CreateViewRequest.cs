@@ -17,6 +17,8 @@ public class CreateViewRequest {
 
     public string ImgSrc { get; set; }
 
+    public int? Order {get; set;}
+
     public int YearId { get; set; }
 
     public int? ViewId { get; set; }

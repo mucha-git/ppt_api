@@ -37,7 +37,7 @@ public class ElementsRepository : IElementsRepository
     {
         var ret = await _context.Years
             .Where(y => y.PilgrimageId == pilgrimageId && y.Id == id)
-            .Include(v => v.Elements).FirstOrDefaultAsync();
+            .Include(v => v.Elements.OrderBy(o => o.Order)).FirstOrDefaultAsync();
         return ret==null? null : ret.Elements;
     }
 

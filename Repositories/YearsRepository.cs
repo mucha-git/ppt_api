@@ -26,8 +26,8 @@ public class YearsRepository : IYearsRepository
     {
         return await _context.Years
             .Where(y => y.Id == yearId)
-            .Include(e => e.Elements)
-            .Include(v => v.Views)
+            .Include(e => e.Elements.OrderBy(o => o.Order))
+            .Include(v => v.Views.OrderBy(o => o.Order))
             .Include(mp => mp.MapPins)
             .Include(m => m.Maps).ThenInclude(ma => ma.Markers)
             //.Include(m => m.Maps).ThenInclude(c => c.Polylines.OrderBy(u => u.Id))

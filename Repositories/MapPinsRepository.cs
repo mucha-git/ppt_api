@@ -39,9 +39,15 @@ public class MapPinsRepository : IMapPinsRepository
 
     public async Task<MapPins> Update(MapPins model)
     {
-        _context.MapPins.Update(model);
+        var pin = await _context.MapPins.FirstOrDefaultAsync( p => p.Id == model.Id);
+        pin.Height = model.Height;
+        pin.IconSrc = model.IconSrc;
+        pin.Name = model.Name;
+        pin.PinSrc = model.PinSrc;
+        pin.Width = model.Width;
+        //_context.MapPins.Update(model);
         await _context.SaveChangesAsync();
-        return model;
+        return pin;
     }
 
     public async Task Delete(MapPins model){

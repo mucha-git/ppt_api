@@ -25,7 +25,7 @@ public class OneSignalService : IOneSignalService
     public async Task Push(CreatePostMessage message, string oneSignalApiKey)
     {
         if(oneSignalApiKey != null && oneSignalApiKey != ""){
-            var client = new RestClient("https://onesignal.com/api/v1/notifications");
+            var client = new RestClient("https://onesignal.com");
             var request = new RestRequest("/api/v1/notifications");
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", "Basic " + oneSignalApiKey);

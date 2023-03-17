@@ -65,6 +65,6 @@ public class PilgrimagesRepository : IPilgrimagesRepository
     public async Task SavePilgrimageToRedis(int pilgrimageId){
         var pilgrimage = await Get(pilgrimageId);
         string recordKey = $"Pilgrimage_{pilgrimageId}";
-        await _cache.SetRecordAsync(recordKey, pilgrimage);
+        await _cache.SetRecordAsync(recordKey, pilgrimage.FirstOrDefault());
     }
 }

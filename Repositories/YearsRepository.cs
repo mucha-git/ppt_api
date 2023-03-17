@@ -36,7 +36,7 @@ public class YearsRepository : IYearsRepository
 
     public async Task SaveYearToRedis(int yearId){
         var year = await Get(yearId);
-        year.Version = new Guid();
+        year.Version = Guid.NewGuid();
         await _context.SaveChangesAsync();
         string recordKey = $"Year_{yearId}";
         await _cache.SetRecordAsync(recordKey, year);

@@ -14,6 +14,9 @@ public class Pilgrimages
     [Column(TypeName = "varchar(1000)")]
     public string LogoSrc { get; set; }
 
+    [Column(TypeName = "varchar(50)")]
+    public string OneSignal {get; set;}
+
     public IEnumerable<Account> Accounts { get; set; }
 
     public IEnumerable<Years> Years { get; set; }

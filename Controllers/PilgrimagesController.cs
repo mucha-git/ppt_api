@@ -32,7 +32,7 @@ public class PilgrimagesController : BaseController
     }
 
     [HttpPut]
-    [Authorize(Role.Admin)]
+    [Authorize(Role.Admin, Role.Manager)]
     public async Task<ActionResult> Update(UpdatePilgrimageRequest request){
         var result = await _pilgrimagesService.Update(request);
         return Ok(result);

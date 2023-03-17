@@ -13,4 +13,5 @@ public class UpdatePilgrimageRequest {
     public bool isActive {get; set;}
 
     public string LogoSrc { get; set; }
+    public string OneSignal {get; set;}
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using WebApi.Entities;
 using WebApi.Helpers;
 
@@ -12,21 +13,25 @@ public interface IPilgrimagesRepository
     Task<Pilgrimages> Create(Pilgrimages model);
     Task<Pilgrimages> Update(Pilgrimages model);
     Task Delete(Pilgrimages model);
+    Task SavePilgrimageToRedis(int pilgrimageId);
 }
 
 public class PilgrimagesRepository : IPilgrimagesRepository
 {
     private readonly DataContext _context;
+    private IDistributedCache _cache;
 
-    public PilgrimagesRepository(DataContext context)
+    public PilgrimagesRepository(DataContext context, IDistributedCache cache)
     {
         _context = context;
+        _cache = cache;
     }
 
     public async Task<Pilgrimages> Create(Pilgrimages model)
     {
         await _context.Pilgrimages.AddAsync(model);
         await _context.SaveChangesAsync();
+        await SavePilgrimageToRedis(model.Id);
         return model;
     }
 
@@ -43,6 +48,7 @@ public class PilgrimagesRepository : IPilgrimagesRepository
     {
         _context.Pilgrimages.Update(model);
         await _context.SaveChangesAsync();
+        await SavePilgrimageToRedis(model.Id);
         return model;
     }
 
@@ -54,5 +60,11 @@ public class PilgrimagesRepository : IPilgrimagesRepository
     public async Task<Pilgrimages> GetById(int id)
     {
         return await _context.Pilgrimages.Where(e => e.Id == id).FirstOrDefaultAsync();
+    }
+
+    public async Task SavePilgrimageToRedis(int pilgrimageId){
+        var pilgrimage = await Get(pilgrimageId);
+        string recordKey = $"Pilgrimage_{pilgrimageId}";
+        await _cache.SetRecordAsync(recordKey, pilgrimage);
     }
 }

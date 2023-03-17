@@ -15,11 +15,13 @@ public class YearsRepository : IYearsRepository
 {
     private readonly DataContext _context;
     private IDistributedCache _cache;
+    private IPilgrimagesRepository _pilgrimageRepository;
 
-    public YearsRepository(DataContext context, IDistributedCache cache)
+    public YearsRepository(DataContext context, IDistributedCache cache, IPilgrimagesRepository pilgrimageRepository)
     {
         _context = context;
         _cache = cache;
+        _pilgrimageRepository = pilgrimageRepository;
     }
 
     public async Task<Years> Get(int yearId)
@@ -40,5 +42,6 @@ public class YearsRepository : IYearsRepository
         await _context.SaveChangesAsync();
         string recordKey = $"Year_{yearId}";
         await _cache.SetRecordAsync(recordKey, year);
+        await _pilgrimageRepository.SavePilgrimageToRedis(year.PilgrimageId);
     }
 }

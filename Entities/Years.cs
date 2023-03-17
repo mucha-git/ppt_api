@@ -15,6 +15,8 @@ public class Years
     [Column(TypeName = "varchar(1000)")]
     public string ImgSrc { get; set; }
 
+    public Guid? Version { get; set; }
+
     public int PilgrimageId { get; set; }
     public Pilgrimages Pilgrimage { get; set; }
 

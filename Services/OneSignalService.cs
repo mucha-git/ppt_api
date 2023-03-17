@@ -1,39 +1,48 @@
 namespace WebApi.Services;
 
+using System.Net.Http.Headers;
+using System.Text.Json;
 using AutoMapper;
-using RestSharp;
-using WebApi.Entities;
-using WebApi.Factories;
-using WebApi.Models.Maps;
 using WebApi.Models.OneSignal;
-using WebApi.Models.Views;
 using WebApi.Repositories;
 
 public interface IOneSignalService
 {
-    Task Push(CreatePostMessage message, string oneSignalApiKey);
+    Task Push(CreatePostMessage message, int pilgrimageId);
 }
 
 public class OneSignalService : IOneSignalService
 {
     private readonly IMapper _mapper;
-    public OneSignalService(IMapper mapper)
+    private readonly IPilgrimagesRepository _pilgrimageRepository;
+    public OneSignalService(IMapper mapper, IPilgrimagesRepository pilgrimagesRepository)
     {
         _mapper = mapper;
+        _pilgrimageRepository = pilgrimagesRepository;
     }
 
-    public async Task Push(CreatePostMessage message, string oneSignalApiKey)
+    public async Task Push(CreatePostMessage message, int pilgrimageId)
     {
-        if(oneSignalApiKey != null && oneSignalApiKey != ""){
-            var client = new RestClient("https://onesignal.com");
-            var request = new RestRequest("/api/v1/notifications");
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("Authorization", "Basic " + oneSignalApiKey);
-            request.AddHeader("content-type", "application/json");
-            var body = "{\"included_segments\":[\"Subscribed Users\"],\"contents\":{\"en\":\""+ message.Content +"\"},\"name\":\""+ message.Name +"\"}";
-        
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            var response = await client.PostAsync(request);
+        var pilgrimage = await _pilgrimageRepository.GetById(pilgrimageId);
+        if(pilgrimage.OneSignalApiKey != null && pilgrimage.OneSignalApiKey != ""){
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://onesignal.com/api/v1/notifications");
+            //httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Authorization", "Basic " + pilgrimage.OneSignalApiKey);
+            //client.DefaultRequestHeaders.Add("content-type", "application/json");
+            string[] cars = {"Subscribed Users"};
+            var content = new StringContent(JsonSerializer.Serialize(new {
+                app_id = pilgrimage.OneSignal,
+                contents = new {
+                    en = message.Content.Trim()
+                },
+                name = message.Name,
+                included_segments = cars
+            }));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = await client.PostAsync("https://onesignal.com/api/v1/notifications", content);
         }
     }
 

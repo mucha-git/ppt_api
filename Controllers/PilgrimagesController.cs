@@ -35,8 +35,9 @@ public class PilgrimagesController : BaseController
     }
 
     [HttpPost("oneSignal")]
+    [Authorize(Role.Manager, Role.User)]
     public async Task<ActionResult> GetPilgrimages(CreatePostMessage message){
-        await _oneSignalService.Push(message, Account.Pilgrimage.OneSignalApiKey);
+        await _oneSignalService.Push(message, (int)Account.PilgrimageId);
         return Ok();
     }
 

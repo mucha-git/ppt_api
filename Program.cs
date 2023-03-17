@@ -73,7 +73,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IMapsService, MapsService>();
     services.AddScoped<IPilgrimagesService, PilgrimagesService>();
     services.AddScoped<IMapPinsService, MapPinsService>();
-    services.AddSingleton<IOneSignalService, OneSignalService>();
+    services.AddScoped<IOneSignalService, OneSignalService>();
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();

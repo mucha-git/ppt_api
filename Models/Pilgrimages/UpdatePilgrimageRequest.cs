@@ -14,4 +14,5 @@ public class UpdatePilgrimageRequest {
 
     public string LogoSrc { get; set; }
     public string OneSignal {get; set;}
+    public string OneSignalApiKey {get; set;}
 }

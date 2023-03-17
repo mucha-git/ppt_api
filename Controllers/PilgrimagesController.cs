@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Authorization;
 using WebApi.Entities;
 using WebApi.Helpers;
+using WebApi.Models.OneSignal;
 using WebApi.Models.Pilgrimages;
 using WebApi.Services;
 
@@ -13,9 +14,11 @@ using WebApi.Services;
 public class PilgrimagesController : BaseController
 {
     private readonly IPilgrimagesService _pilgrimagesService;
-    public PilgrimagesController(IPilgrimagesService pilgrimagesService)
+    private readonly IOneSignalService _oneSignalService;
+    public PilgrimagesController(IPilgrimagesService pilgrimagesService, IOneSignalService oneSignalService)
     {
         _pilgrimagesService = pilgrimagesService;
+        _oneSignalService = oneSignalService;
     }
 
     [HttpGet]
@@ -29,6 +32,12 @@ public class PilgrimagesController : BaseController
     public async Task<ActionResult> Create(CreatePilgrimageRequest request){
         var result = await _pilgrimagesService.Create(request);
         return Ok(result);
+    }
+
+    [HttpPost("oneSignal")]
+    public async Task<ActionResult> GetPilgrimages(CreatePostMessage message){
+        await _oneSignalService.Push(message, Account.Pilgrimage.OneSignalApiKey);
+        return Ok();
     }
 
     [HttpPut]

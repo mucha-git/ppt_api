@@ -17,6 +17,9 @@ public class Pilgrimages
     [Column(TypeName = "varchar(50)")]
     public string OneSignal {get; set;}
 
+    [Column(TypeName = "varchar(50)")]
+    public string OneSignalApiKey {get; set;}
+
     public IEnumerable<Account> Accounts { get; set; }
 
     public IEnumerable<Years> Years { get; set; }

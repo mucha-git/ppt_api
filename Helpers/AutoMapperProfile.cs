@@ -8,6 +8,7 @@ using WebApi.Models.MapPins;
 using WebApi.Models.Maps;
 using WebApi.Models.Pilgrimages;
 using WebApi.Models.Views;
+using WebApi.Models.Years;
 
 public class AutoMapperProfile : Profile
 {
@@ -50,11 +51,13 @@ public class AutoMapperProfile : Profile
         CreateMap<CreateMarkerRequest, Markers>();
         CreateMap<CreatePilgrimageRequest, Pilgrimages>();
         CreateMap<CreateMapPinRequest, MapPins>();
+        CreateMap<CreateYearRequest, Years>();
 
         CreateMap<UpdateMapRequest, Maps>();
         CreateMap<UpdateCoordinateRequest, Coordinates>();
         CreateMap<UpdateMarkerRequest, Markers>();
         CreateMap<UpdatePilgrimageRequest, Pilgrimages>();
         CreateMap<UpdateMapPinRequest, MapPins>();
+        CreateMap<UpdateYearRequest, Years>();
     }
 }

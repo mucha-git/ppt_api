@@ -2,9 +2,11 @@
 
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Entities;
+using WebApi.Helpers;
 using WebApi.Models.Accounts;
 using WebApi.Models.Pilgrimages;
 using WebApi.Models.Views;
+using WebApi.Models.Years;
 using WebApi.Services;
 
 [ApiController]
@@ -18,30 +20,34 @@ public class YearsController : BaseController
         _yearsService = yearsService;
     }
 
-    /*[HttpGet("{id:int}")]
-    public async Task<ActionResult> GetYears(int id){
-        var result = await _yearsService.GetYears((int)Account.PilgrimageId, id);
+    [HttpGet]
+    [Authorize(Role.Manager)]
+    public async Task<ActionResult> GetYears(){
+        var result = await _yearsService.GetYears((int)Account.PilgrimageId);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(CreateViewRequest request){
-        var result = await _viewsService.Create(request);
+    [Authorize(Role.Manager)]
+    public async Task<ActionResult> Create(CreateYearRequest request){
+        var result = await _yearsService.Create(request);
         return Ok(result);
     }
 
     [HttpPut]
-    public async Task<ActionResult> Update(UpdateViewRequest request){
-        var result = await _viewsService.Update(request);
+    [Authorize(Role.Manager)]
+    public async Task<ActionResult> Update(UpdateYearRequest request){
+        var result = await _yearsService.Update(request);
         return Ok(result);
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Role.Manager)]
     public async Task<ActionResult> Delete(int id){
-        await _viewsService.Delete(id);
+        await _yearsService.Delete(id);
         return NoContent();
     }
-*/
+
     [HttpPost("resetYearInRedis")]
     public async Task<ActionResult> ResetYearToRedis(GetYearDataRequest request)
     {

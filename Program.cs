@@ -90,6 +90,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IMapsFactory, MapsFactory>();
     services.AddScoped<IPilgrimagesFactory, PilgrimagesFactory>();
     services.AddScoped<IMapPinsFactory, MapPinsFactory>();
+    services.AddScoped<IYearsFactory, YearsFactory>();
 }
 
 var app = builder.Build();

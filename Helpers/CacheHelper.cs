@@ -37,4 +37,10 @@ public static class CacheHelper
             };
             return JsonSerializer.Deserialize<T>(jsonData, jsonOptions);
         }
+
+        public static async Task RemoveRecordAsync<T>(this IDistributedCache cache,
+                                                   string recordId)
+        {
+            //await cache.RemoveRecordAsync<T>(recordId);
+        }
     }

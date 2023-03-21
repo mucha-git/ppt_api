@@ -7,7 +7,11 @@ namespace WebApi.Repositories;
 
 public interface IYearsRepository
 {
-    Task<Years> Get(int year);
+    Task<IEnumerable<Years>> Get(int pilgrimageId);
+    Task<Years> GetById(int year);
+    Task<Years> Create(Years model);
+    Task<Years> Update(Years model);
+    Task Delete(Years model);
     Task SaveYearToRedis(int yearId);
 }
 
@@ -24,7 +28,12 @@ public class YearsRepository : IYearsRepository
         _pilgrimageRepository = pilgrimageRepository;
     }
 
-    public async Task<Years> Get(int yearId)
+    public async Task<IEnumerable<Years>> Get(int pilgrimageId)
+    {
+        return await _context.Years.Where(y => y.PilgrimageId == pilgrimageId).OrderBy( o => o.Id).ToListAsync();
+    }
+
+    public async Task<Years> GetById(int yearId)
     {
         return await _context.Years
             .Where(y => y.Id == yearId)
@@ -36,8 +45,32 @@ public class YearsRepository : IYearsRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task<Years> Create(Years model)
+    {
+        await _context.Years.AddAsync(model);
+        await _context.SaveChangesAsync();
+        await SaveYearToRedis(model.Id);
+        return model;
+    }
+
+    public async Task<Years> Update(Years model)
+    {
+        _context.Years.Update(model);
+        await _context.SaveChangesAsync();
+        await SaveYearToRedis(model.Id);
+        return model;
+    }
+
+    public async Task Delete(Years model){
+        _context.Years.Remove(model);
+        await _context.SaveChangesAsync();
+        string recordKey = $"Year_{model.Id}";
+        await _cache.RemoveRecordAsync<Years>(recordKey);
+        await _pilgrimageRepository.SavePilgrimageToRedis(model.PilgrimageId);
+    }
+
     public async Task SaveYearToRedis(int yearId){
-        var year = await Get(yearId);
+        var year = await GetById(yearId);
         year.Version = Guid.NewGuid();
         await _context.SaveChangesAsync();
         string recordKey = $"Year_{yearId}";

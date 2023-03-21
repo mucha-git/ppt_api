@@ -31,14 +31,14 @@ public class OneSignalService : IOneSignalService
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Authorization", "Basic " + pilgrimage.OneSignalApiKey);
             //client.DefaultRequestHeaders.Add("content-type", "application/json");
-            string[] cars = {"Subscribed Users"};
+            string[] segments = {"Subscribed Users"};
             var content = new StringContent(JsonSerializer.Serialize(new {
                 app_id = pilgrimage.OneSignal,
                 contents = new {
                     en = message.Content.Trim()
                 },
-                name = message.Name,
-                included_segments = cars
+                headings = new {en = message.Name },
+                included_segments = segments
             }));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

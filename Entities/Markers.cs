@@ -7,13 +7,13 @@ public class Markers
 {
     public int Id { get; set; }
     
-    [Column(TypeName = "varchar(100)")]
+    [Column(TypeName = "varchar(200)")]
     public string Title { get; set; }
 
-    [Column(TypeName = "varchar(200)")]
+    [Column(TypeName = "varchar(1000)")]
     public string Description { get; set; }
 
-    [Column(TypeName = "varchar(50)")]
+    [Column(TypeName = "varchar(100)")]
     public string FooterText { get; set; }
 
     [Column(TypeName = "varchar(10)")]

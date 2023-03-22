@@ -41,6 +41,6 @@ public static class CacheHelper
         public static async Task RemoveRecordAsync<T>(this IDistributedCache cache,
                                                    string recordId)
         {
-            //await cache.RemoveRecordAsync<T>(recordId);
+            await cache.RemoveAsync(recordId);
         }
     }

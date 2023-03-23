@@ -15,6 +15,8 @@ public class AuthenticateResponse
     public int? PilgrimageId { get; set; }
     public bool IsVerified { get; set; }
     public string JwtToken { get; set; }
+    public string OneSignalAppId { get; set;}
+    public string OneSignalApiKey { get; set; }
 
     [JsonIgnore] // refresh token is returned in http only cookie
     public string RefreshToken { get; set; }

@@ -19,8 +19,8 @@ public interface IAccountService
 {
     Task<GetSaltResponse> GetSalt(GetSaltRequest model);
     Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress);
-    AuthenticateResponse RefreshToken(string token, string ipAddress);
-    void RevokeToken(string token, string ipAddress);
+    Task<AuthenticateResponse> RefreshToken(string token, string ipAddress);
+    Task RevokeToken(string token, string ipAddress);
     void Register(RegisterRequest model, string origin);
     void VerifyEmail(string token);
     void ForgotPassword(ForgotPasswordRequest model, string origin);
@@ -95,7 +95,7 @@ public class AccountService : IAccountService, IAccount
 
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress)
     {
-        var account = _context.Accounts.SingleOrDefault(x => x.Email == model.Email);
+        var account = await _context.Accounts.Where(x => x.Email == model.Email).Include(p => p.Pilgrimage).SingleOrDefaultAsync();
 
         // validate
         if (account == null || !account.IsVerified || !BC.Verify(account.PasswordHash + account.Random, model.Password)){
@@ -118,12 +118,16 @@ public class AccountService : IAccountService, IAccount
         var response = _mapper.Map<AuthenticateResponse>(account);
         response.JwtToken = jwtToken;
         response.RefreshToken = refreshToken.Token;
+        if(account.Pilgrimage != null) {
+            response.OneSignalApiKey = account.Pilgrimage.OneSignalApiKey;
+            response.OneSignalAppId = account.Pilgrimage.OneSignal;
+        }
         return response;
     }
 
-    public AuthenticateResponse RefreshToken(string token, string ipAddress)
+    public async Task<AuthenticateResponse> RefreshToken(string token, string ipAddress)
     {
-        var account = getAccountByRefreshToken(token);
+        var account = await getAccountByRefreshToken(token);
         var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
 
         if (refreshToken.IsRevoked)
@@ -155,12 +159,16 @@ public class AccountService : IAccountService, IAccount
         var response = _mapper.Map<AuthenticateResponse>(account);
         response.JwtToken = jwtToken;
         response.RefreshToken = newRefreshToken.Token;
+        if(account.Pilgrimage != null) {
+            response.OneSignalApiKey = account.Pilgrimage.OneSignalApiKey;
+            response.OneSignalAppId = account.Pilgrimage.OneSignal;
+        }
         return response;
     }
 
-    public void RevokeToken(string token, string ipAddress)
+    public async Task RevokeToken(string token, string ipAddress)
     {
-        var account = getAccountByRefreshToken(token);
+        var account = await getAccountByRefreshToken(token);
         var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
 
         if (!refreshToken.IsActive)
@@ -334,9 +342,9 @@ public class AccountService : IAccountService, IAccount
         return account;
     }
 
-    private Account getAccountByRefreshToken(string token)
+    private async Task<Account> getAccountByRefreshToken(string token)
     {
-        var account = _context.Accounts.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
+        var account = await _context.Accounts.Where(u => u.RefreshTokens.Any(t => t.Token == token)).Include(p => p.Pilgrimage).SingleOrDefaultAsync();
         if (account == null) throw new AppException("Invalid token");
         return account;
     }

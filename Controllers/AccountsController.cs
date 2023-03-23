@@ -38,16 +38,16 @@ public class AccountsController : BaseController
 
     [AllowAnonymous]
     [HttpPost("refresh-token")]
-    public ActionResult<AuthenticateResponse> RefreshToken()
+    public async Task<ActionResult<AuthenticateResponse>> RefreshToken()
     {
         var refreshToken = Request.Cookies["refreshToken"];
-        var response = _accountService.RefreshToken(refreshToken, ipAddress());
+        var response = await _accountService.RefreshToken(refreshToken, ipAddress());
         setTokenCookie(response.RefreshToken);
         return Ok(response);
     }
 
     [HttpPost("revoke-token")]
-    public IActionResult RevokeToken(RevokeTokenRequest model)
+    public async Task<IActionResult> RevokeToken(RevokeTokenRequest model)
     {
         // accept token from request body or cookie
         var token = model.Token ?? Request.Cookies["refreshToken"];
@@ -59,7 +59,7 @@ public class AccountsController : BaseController
         if (!Account.OwnsToken(token) && Account.Role != Role.Admin)
             return Unauthorized(new { message = "Unauthorized" });
 
-        _accountService.RevokeToken(token, ipAddress());
+        await _accountService.RevokeToken(token, ipAddress());
         return Ok(new { message = "Token revoked" });
     }
 

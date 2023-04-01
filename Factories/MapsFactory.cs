@@ -2,7 +2,6 @@ using AutoMapper;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models.Maps;
-using WebApi.Models.Views;
 
 namespace WebApi.Factories
 {

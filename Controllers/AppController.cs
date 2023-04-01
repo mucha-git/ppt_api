@@ -7,6 +7,7 @@ using WebApi.Helpers;
 using WebApi.Models.Accounts;
 using WebApi.Models.Pilgrimages;
 using WebApi.Models.Views;
+using WebApi.Repositories;
 using WebApi.Services;
 
 [ApiController]
@@ -34,7 +35,6 @@ public class AppController : BaseController
                 years = await _yearsService.GetData(request.YearId);
                 await _cache.SetRecordAsync(recordKey, years);
             }
-            
         //var result = await _yearsService.GetData(request.PilgrimageId, request.Year);
         return Ok(years);
     }
@@ -55,6 +55,5 @@ public class AppController : BaseController
         //var result = await _yearsService.GetData(request.PilgrimageId, request.Year);
         return Ok(pilgrimage);
     }
-
     
 }

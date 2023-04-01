@@ -52,6 +52,6 @@ public class MapsRepository : IMapsRepository
 
     public async Task<Maps> GetById(int id)
     {
-        return await _context.Maps.Where(e => e.Id == id).Include(m => m.Markers).FirstOrDefaultAsync();
+        return await _context.Maps.Where(e => e.Id == id).FirstOrDefaultAsync();
     }
 }

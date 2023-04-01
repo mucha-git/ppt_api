@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using WebApi.Entities;
 using WebApi.Helpers;
@@ -40,7 +41,7 @@ public class YearsRepository : IYearsRepository
             .Include(e => e.Elements.OrderBy(o => o.Order))
             .Include(v => v.Views.OrderBy(o => o.Order))
             .Include(mp => mp.MapPins)
-            .Include(m => m.Maps).ThenInclude(ma => ma.Markers)
+            .Include(m => m.Maps)//.ThenInclude(ma => ma.Markers)
             //.Include(m => m.Maps).ThenInclude(c => c.Polylines.OrderBy(u => u.Id))
             .FirstOrDefaultAsync();
     }

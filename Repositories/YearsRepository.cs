@@ -36,19 +36,31 @@ public class YearsRepository : IYearsRepository
 
     public async Task<Years> GetById(int yearId)
     {
-        return await _context.Years
-            .Where(y => y.Id == yearId)
-            .Include(e => e.Elements.OrderBy(o => o.Order))
-            .Include(v => v.Views.OrderBy(o => o.Order))
-            .Include(mp => mp.MapPins)
-            .Include(m => m.Maps)//.ThenInclude(ma => ma.Markers)
-            //.Include(m => m.Maps).ThenInclude(c => c.Polylines.OrderBy(u => u.Id))
-            .FirstOrDefaultAsync();
+        Years year = await _context.Years
+            .Where(y => y.Id == yearId).FirstOrDefaultAsync();
+            if(year != null){
+                year.Elements = await _context.Elements.Where(e => e.YearId == yearId).OrderBy(o => o.Order).ToListAsync();
+                year.Views = await _context.Views.Where( w => w.YearId == yearId).OrderBy(o => o.Order).ToListAsync();
+                year.MapPins = await _context.MapPins.Where( mp => mp.YearId == yearId).ToListAsync();
+                year.Maps = await _context.Maps.Where( m => m.YearId == yearId ).ToListAsync();
+            }
+
+        // Years y2 = await _context.Years
+        //     .Where(y => y.Id == yearId)
+        //     .Include(e => e.Elements.OrderBy(o => o.Order))
+        //     .Include(v => v.Views.OrderBy(o => o.Order))
+        //     .Include(mp => mp.MapPins)
+        //     .Include(m => m.Maps)//.ThenInclude(ma => ma.Markers)
+        //     //.Include(m => m.Maps).ThenInclude(c => c.Polylines.OrderBy(u => u.Id))
+        //     .FirstOrDefaultAsync();
+        
+        return year;
     }
 
     public async Task<Years> Create(Years model)
     {
         await _context.Years.AddAsync(model);
+        if(model.isActive) await ChangeActiveYear(model.Id);
         await _context.SaveChangesAsync();
         await SaveYearToRedis(model.Id);
         return model;
@@ -57,6 +69,7 @@ public class YearsRepository : IYearsRepository
     public async Task<Years> Update(Years model)
     {
         _context.Years.Update(model);
+        if(model.isActive) await ChangeActiveYear(model.Id);
         await _context.SaveChangesAsync();
         await SaveYearToRedis(model.Id);
         return model;
@@ -77,5 +90,13 @@ public class YearsRepository : IYearsRepository
         string recordKey = $"Year_{yearId}";
         await _cache.SetRecordAsync(recordKey, year);
         await _pilgrimageRepository.SavePilgrimageToRedis(year.PilgrimageId);
+    }
+
+    private async Task ChangeActiveYear(int id){
+        var years = await _context.Years.Where(y => y.isActive == true && y.Id != id).ToListAsync();
+            foreach (var year in years)
+            {
+                year.isActive = false;
+            }
     }
 }

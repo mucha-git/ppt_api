@@ -30,14 +30,15 @@ public class ElementsService : IElementsService
 
     public async Task<Elements> Create(CreateElementRequest request)
     {
-        var view = _elementsFactory.Create(request);
-        return await _elementsRepository.Create(view);
+        var element = _elementsFactory.Create(request);
+        if(element.mapHeight == 0) element.mapHeight = null;
+        return await _elementsRepository.Create(element);
     }
 
     public async Task Delete(int id)
     {
-        var view = await _elementsRepository.GetById(id);
-        await _elementsRepository.Delete(view);
+        var element = await _elementsRepository.GetById(id);
+        await _elementsRepository.Delete(element);
     }
 
     public async Task<IEnumerable<Elements>> GetElements(int pilgrimageId, int year)
@@ -47,7 +48,8 @@ public class ElementsService : IElementsService
 
     public async Task<Elements> Update(UpdateElementRequest request)
     {
-        var view = _mapper.Map<Elements>(request);
-        return await _elementsRepository.Update(view);
+        var element = _mapper.Map<Elements>(request);
+        if(element.mapHeight == 0) element.mapHeight = null;
+        return await _elementsRepository.Update(element);
     }
 }

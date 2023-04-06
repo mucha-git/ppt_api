@@ -31,14 +31,14 @@ public class MapsService : IMapsService
 
     public async Task<Maps> Create(CreateMapRequest request)
     {
-        var view = _mapsFactory.Create(request);
-        return await _mapsRepository.Create(view);
+        var map = _mapsFactory.Create(request);
+        return await _mapsRepository.Create(map);
     }
 
     public async Task Delete(int id)
     {
-        var view = await _mapsRepository.GetById(id);
-        await _mapsRepository.Delete(view);
+        var map = await _mapsRepository.GetById(id);
+        await _mapsRepository.Delete(map);
     }
 
     public async Task<IEnumerable<Maps>> GetMaps(int pilgrimageId, int year)
@@ -53,7 +53,7 @@ public class MapsService : IMapsService
 
     public async Task<Maps> Update(UpdateMapRequest request)
     {
-        var view = _mapper.Map<Maps>(request);
-        return await _mapsRepository.Update(view);
+        var map = _mapper.Map<Maps>(request);
+        return await _mapsRepository.Update(map);
     }
 }

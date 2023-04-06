@@ -60,7 +60,7 @@ public class YearsRepository : IYearsRepository
     public async Task<Years> Create(Years model)
     {
         await _context.Years.AddAsync(model);
-        if(model.isActive) await ChangeActiveYear(model.Id);
+        if(model.isActive) await ChangeActiveYear(model.Id, model.PilgrimageId);
         await _context.SaveChangesAsync();
         await SaveYearToRedis(model.Id);
         return model;
@@ -69,7 +69,7 @@ public class YearsRepository : IYearsRepository
     public async Task<Years> Update(Years model)
     {
         _context.Years.Update(model);
-        if(model.isActive) await ChangeActiveYear(model.Id);
+        if(model.isActive) await ChangeActiveYear(model.Id, model.PilgrimageId);
         await _context.SaveChangesAsync();
         await SaveYearToRedis(model.Id);
         return model;
@@ -92,8 +92,8 @@ public class YearsRepository : IYearsRepository
         await _pilgrimageRepository.SavePilgrimageToRedis(year.PilgrimageId);
     }
 
-    private async Task ChangeActiveYear(int id){
-        var years = await _context.Years.Where(y => y.isActive == true && y.Id != id).ToListAsync();
+    private async Task ChangeActiveYear(int id, int pilgrimageId){
+        var years = await _context.Years.Where(y => y.isActive == true && y.Id != id && y.PilgrimageId == pilgrimageId ).ToListAsync();
             foreach (var year in years)
             {
                 year.isActive = false;

@@ -7,7 +7,6 @@ using WebApi.Models.Views;
 using WebApi.Services;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class ViewsController : BaseController
 {
@@ -18,24 +17,28 @@ public class ViewsController : BaseController
     }
 
     [HttpGet("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> GetViews(int id){
         var result = await _viewsService.GetViews((int)Account.PilgrimageId, id);
         return Ok(result);
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create(CreateViewRequest request){
         var result = await _viewsService.Create(request);
         return Ok(result);
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult> Update(UpdateViewRequest request){
         var result = await _viewsService.Update(request);
         return Ok(result);
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> Delete(int id){
         await _viewsService.Delete(id);
         return NoContent();

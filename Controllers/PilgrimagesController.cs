@@ -9,7 +9,6 @@ using WebApi.Models.Pilgrimages;
 using WebApi.Services;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class PilgrimagesController : BaseController
 {
@@ -22,6 +21,7 @@ public class PilgrimagesController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetPilgrimages(){
         var result = await _pilgrimagesService.GetPilgrimages(Account.PilgrimageId);
         return Ok(result);

@@ -10,7 +10,6 @@ using WebApi.Models.Years;
 using WebApi.Services;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class YearsController : BaseController
 {
@@ -34,6 +33,13 @@ public class YearsController : BaseController
         return Ok(result);
     }
 
+    // [HttpPost("copy")]
+    // [Authorize(Role.Manager)]
+    // public async Task<ActionResult> Copy(CopyYearRequest request){
+    //     var result = await _yearsService.Copy(request);
+    //     return Ok(result);
+    // }
+
     [HttpPut]
     [Authorize(Role.Manager)]
     public async Task<ActionResult> Update(UpdateYearRequest request){
@@ -49,6 +55,7 @@ public class YearsController : BaseController
     }
 
     [HttpPost("resetYearInRedis")]
+    [Authorize]
     public async Task<ActionResult> ResetYearToRedis(GetYearDataRequest request)
     {
         await _yearsService.SaveYearToRedis(request.YearId);

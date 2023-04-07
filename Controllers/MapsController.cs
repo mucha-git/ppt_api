@@ -7,7 +7,6 @@ using WebApi.Models.Maps;
 using WebApi.Services;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class MapsController : BaseController
 {
@@ -18,6 +17,7 @@ public class MapsController : BaseController
     }
 
     [HttpGet("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> GetMaps(int id){
         var result = await _mapsService.GetMaps((int)Account.PilgrimageId, id);
         return Ok(result);
@@ -30,18 +30,21 @@ public class MapsController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create(CreateMapRequest request){
         var result = await _mapsService.Create(request);
         return Ok(result);
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult> Update(UpdateMapRequest request){
         var result = await _mapsService.Update(request);
         return Ok(result);
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> Delete(int id){
         await _mapsService.Delete(id);
         return NoContent();

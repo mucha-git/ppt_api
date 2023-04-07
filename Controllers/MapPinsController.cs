@@ -6,7 +6,6 @@ using WebApi.Models.MapPins;
 using WebApi.Services;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class MapPinsController : BaseController
 {
@@ -17,6 +16,7 @@ public class MapPinsController : BaseController
     }
 
     [HttpGet("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> GetMapPins(int id){
         var result = await _mapPinsService.GetMapPins(id);
         return Ok(result);
@@ -29,18 +29,21 @@ public class MapPinsController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create(CreateMapPinRequest request){
         var result = await _mapPinsService.Create(request);
         return Ok(result);
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult> Update(UpdateMapPinRequest request){
         var result = await _mapPinsService.Update(request);
         return Ok(result);
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<ActionResult> Delete(int id){
         await _mapPinsService.Delete(id);
         return NoContent();

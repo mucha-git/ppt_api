@@ -18,10 +18,12 @@ public interface IViewsRepository
 public class ViewsRepository : IViewsRepository
 {
     private readonly DataContext _context;
+    private readonly IElementsRepository _elementRepository;
 
-    public ViewsRepository(DataContext context)
+    public ViewsRepository(DataContext context, IElementsRepository elementsRepository)
     {
         _context = context;
+        _elementRepository = elementsRepository;
     }
 
     public async Task<Views> Create(Views model)
@@ -73,6 +75,10 @@ public class ViewsRepository : IViewsRepository
 
     public async Task Delete(Views model){
         try {
+            foreach (Views view in await _context.Views.Where( v => v.ViewId == model.Id).ToListAsync())
+            {
+                await Delete(view);
+            }
         _context.Views.Remove(model);
         await _context.SaveChangesAsync();
         } catch(Exception e) {

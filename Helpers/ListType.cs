@@ -5,5 +5,7 @@ public enum ListType
     Text,
     Graphic,
     TextExternalLink,
-    GraphicExternalLink
+    GraphicExternalLink,
+    GraphicWithText,
+    GraphicWithTextExternalLink
 }

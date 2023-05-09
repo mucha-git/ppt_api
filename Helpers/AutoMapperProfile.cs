@@ -52,6 +52,7 @@ public class AutoMapperProfile : Profile
         CreateMap<CreatePilgrimageRequest, Pilgrimages>();
         CreateMap<CreateMapPinRequest, MapPins>();
         CreateMap<CreateYearRequest, Years>();
+        CreateMap<CreateElementRequest, CreateViewRequest>().ForMember( dest => dest.Type, src => src.MapFrom(m => m.ViewType));
 
         CreateMap<UpdateMapRequest, Maps>();
         CreateMap<UpdateCoordinateRequest, Coordinates>();
@@ -59,5 +60,8 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdatePilgrimageRequest, Pilgrimages>();
         CreateMap<UpdateMapPinRequest, MapPins>();
         CreateMap<UpdateYearRequest, Years>();
+        CreateMap<UpdateElementRequest, UpdateViewRequest>()
+            .ForMember( dest => dest.Type, src => src.MapFrom(m => m.ViewType))
+            .ForMember( dest => dest.Id, src => src.MapFrom( m => m.DestinationViewId));
     }
 }

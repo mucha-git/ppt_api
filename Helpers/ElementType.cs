@@ -8,5 +8,6 @@ public enum ElementType
     YoutubePlayer = 3,
     Divider = 4,
     Map = 5,
-    Navigation = 6
+    Navigation = 6,
+    View = 7
 }

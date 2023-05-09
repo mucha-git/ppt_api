@@ -39,6 +39,16 @@ public class CreateElementRequest {
     public int? DestinationViewId { get; set; }
     #endregion
 
+    #region View
+    public string ExternalUrl { get; set; }
+    public string Title { get; set; }
+    public ListType? ViewType {get; set;}
+
+    public string HeaderText { get; set; }
+
+    public ScreenType? ScreenType { get; set; }
+    #endregion
+
     public int? Order {get; set;}
     public int ViewId { get; set; }
 

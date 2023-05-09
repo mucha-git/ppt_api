@@ -62,6 +62,7 @@ public class ElementsRepository : IElementsRepository
                     element.Order = element.Order - 1;
                 }
             }
+            
             _context.Elements.Update(model);
             await _context.SaveChangesAsync();
             return model;

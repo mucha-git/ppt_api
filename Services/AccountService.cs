@@ -32,6 +32,8 @@ public interface IAccountService
     AccountResponse Create(CreateRequest model);
     AccountResponse Update(int id, UpdateRequest model);
     void Delete(int id);
+
+    Task Copy();
 }
 
 public interface IAccount
@@ -42,6 +44,7 @@ public interface IAccount
 public class AccountService : IAccountService, IAccount
 {
     private readonly DataContext _context;
+    private readonly DataContextFirebird _firebirdContext;
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
@@ -51,6 +54,7 @@ public class AccountService : IAccountService, IAccount
 
     public AccountService(
         DataContext context,
+        DataContextFirebird firebirdContext,
         IJwtUtils jwtUtils,
         IMapper mapper,
         IOptions<AppSettings> appSettings,
@@ -58,6 +62,7 @@ public class AccountService : IAccountService, IAccount
         IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
+        _firebirdContext = firebirdContext;
         _jwtUtils = jwtUtils;
         _mapper = mapper;
         _appSettings = appSettings.Value;
@@ -506,4 +511,43 @@ public class AccountService : IAccountService, IAccount
             _context.Update(account);
             await _context.SaveChangesAsync();
         }
+
+    public async Task Copy()
+    {
+        // pielgrzymki
+        var pielgrzymki = await _firebirdContext.Pilgrimages.ToListAsync();
+        await _context.AddRangeAsync(pielgrzymki);
+        await _context.SaveChangesAsync();
+
+        // uzytkownicy
+        var uzytkownicy = await _firebirdContext.Accounts.ToListAsync();
+        await _context.AddRangeAsync(uzytkownicy);
+        await _context.SaveChangesAsync();
+
+        // roczniki
+        var roczniki = await _firebirdContext.Years.ToListAsync();
+        await _context.AddRangeAsync(roczniki);
+        await _context.SaveChangesAsync();
+
+        // widoki
+        var widoki = await _firebirdContext.Views.ToListAsync();
+        await _context.AddRangeAsync(widoki);
+        await _context.SaveChangesAsync();
+
+        // pinezki map
+        var pinezki = await _firebirdContext.MapPins.ToListAsync();
+        await _context.AddRangeAsync(pinezki);
+        await _context.SaveChangesAsync();
+
+        // mapy
+        var mapy = await _firebirdContext.Maps.ToListAsync();
+        await _context.AddRangeAsync(mapy);
+        await _context.SaveChangesAsync();
+
+
+        // elementy
+        var elementy = await _firebirdContext.Elements.ToListAsync();
+        await _context.AddRangeAsync(elementy);
+        await _context.SaveChangesAsync();
+    }
 }

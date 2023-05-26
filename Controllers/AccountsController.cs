@@ -27,6 +27,14 @@ public class AccountsController : BaseController
         return Ok(response);
     }
 
+    /*[AllowAnonymous]
+    [HttpPost("copy")]
+    public async Task<ActionResult> Copy()
+    {
+        await _accountService.Copy();
+        return Ok();
+    }
+*/
     [AllowAnonymous]
     [HttpPost("authenticate")]
     public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateRequest model)

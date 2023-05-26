@@ -19,18 +19,26 @@ public class PilgrimagesService : IPilgrimagesService
 {
     private readonly IPilgrimagesRepository _pilgrimagesRepository;
     private readonly IPilgrimagesFactory _pilgrimagesFactory;
+    private readonly IYearsService _yearsService;
     private readonly IMapper _mapper;
-    public PilgrimagesService(IPilgrimagesRepository pilgrimagesRepository, IPilgrimagesFactory pilgrimagesFactory, IMapper mapper)
+    public PilgrimagesService(IPilgrimagesRepository pilgrimagesRepository, 
+    IPilgrimagesFactory pilgrimagesFactory,
+    IYearsService yearsService, 
+    IMapper mapper)
     {
         _pilgrimagesRepository = pilgrimagesRepository;
         _pilgrimagesFactory = pilgrimagesFactory;
+        _yearsService = yearsService;
         _mapper = mapper;
     }
 
     public async Task<Pilgrimages> Create(CreatePilgrimageRequest request)
     {
         var pilgrimage = _pilgrimagesFactory.Create(request);
-        return await _pilgrimagesRepository.Create(pilgrimage);
+        Pilgrimages pilgrim = await _pilgrimagesRepository.Create(pilgrimage);
+        Years year = await _yearsService.Create(new Models.Years.CreateYearRequest(){Year = DateTime.Now.Year, YearTopic = "", isActive = true, PilgrimageId = pilgrim.Id});
+        pilgrim.Years.Append(year);
+        return pilgrim;
     }
 
     public async Task Delete(int id)

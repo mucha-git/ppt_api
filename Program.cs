@@ -18,8 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
     IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
                               .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
 
-    //services.AddDbContext<DataContextFirebird>(o => o.UseFirebird(builder.Configuration.GetConnectionString("WebApiDatabaseFirebird"))
-     //                         .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
+    services.AddDbContext<DataContextFirebird>(o => o.UseFirebird(builder.Configuration.GetConnectionString("WebApiDatabaseFirebird"))
+                              .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
     AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     services.AddCors();
     services.AddSignalR();

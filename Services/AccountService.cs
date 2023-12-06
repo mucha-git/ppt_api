@@ -33,7 +33,7 @@ public interface IAccountService
     AccountResponse Update(int id, UpdateRequest model);
     void Delete(int id);
 
-    Task Copy();
+    //Task Copy();
 }
 
 public interface IAccount
@@ -44,7 +44,7 @@ public interface IAccount
 public class AccountService : IAccountService, IAccount
 {
     private readonly DataContext _context;
-    private readonly DataContextFirebird _firebirdContext;
+    //private readonly DataContextFirebird _firebirdContext;
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
@@ -54,7 +54,7 @@ public class AccountService : IAccountService, IAccount
 
     public AccountService(
         DataContext context,
-        DataContextFirebird firebirdContext,
+        //DataContextFirebird firebirdContext,
         IJwtUtils jwtUtils,
         IMapper mapper,
         IOptions<AppSettings> appSettings,
@@ -62,7 +62,7 @@ public class AccountService : IAccountService, IAccount
         IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
-        _firebirdContext = firebirdContext;
+        //_firebirdContext = firebirdContext;
         _jwtUtils = jwtUtils;
         _mapper = mapper;
         _appSettings = appSettings.Value;
@@ -512,7 +512,7 @@ public class AccountService : IAccountService, IAccount
             await _context.SaveChangesAsync();
         }
 
-    public async Task Copy()
+    /*public async Task Copy()
     {
         // pielgrzymki
         var pielgrzymki = await _firebirdContext.Pilgrimages.ToListAsync();
@@ -549,5 +549,5 @@ public class AccountService : IAccountService, IAccount
         var elementy = await _firebirdContext.Elements.ToListAsync();
         await _context.AddRangeAsync(elementy);
         await _context.SaveChangesAsync();
-    }
+    }*/
 }

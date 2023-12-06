@@ -18,8 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
     IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
                               .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
 
-    services.AddDbContext<DataContextFirebird>(o => o.UseFirebird(builder.Configuration.GetConnectionString("WebApiDatabaseFirebird"))
-                              .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
+    //services.AddDbContext<DataContextFirebird>(o => o.UseFirebird(builder.Configuration.GetConnectionString("WebApiDatabaseFirebird"))
+    //                          .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
     AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     services.AddCors();
     services.AddSignalR();
@@ -32,7 +32,9 @@ var builder = WebApplication.CreateBuilder(args);
         // serialize enums as strings in api responses (e.g. Role)
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }).AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+                {x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                });
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddSwaggerGen(c =>
     {

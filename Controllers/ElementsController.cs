@@ -39,6 +39,13 @@ public class ElementsController : BaseController
         return Ok(result);
     }
 
+    /*[HttpPut("all")]
+    //[Authorize]
+    public async Task<ActionResult> UpdateAll(){
+        var result = await _elementsService.UpdateAll();
+        return Ok(result);
+    }*/
+
     [HttpDelete("{id:int}")]
     [Authorize]
     public async Task<ActionResult> Delete(int id){

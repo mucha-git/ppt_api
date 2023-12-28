@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 using WebApi.Entities;
 using WebApi.Helpers;
 
@@ -54,3 +55,25 @@ public class CreateElementRequest {
 
     public int YearId { get; set; }
 }
+
+public class CreateElementRequestValidator : AbstractValidator<CreateElementRequest> {
+    public CreateElementRequestValidator(IValidations validations) {
+        RuleFor( v => v.YearId).MustAsync(async (request , _) => {
+            return await validations.IsYearValid(request);
+        }).WithMessage("Nie można edytować cudzych danych");
+        RuleFor( v => v).MustAsync(async (request , _) => {
+            return await validations.IsViewValid(request.YearId, request.ViewId);
+        }).WithMessage("Nie można edytować cudzych danych");
+        RuleFor( v => v).MustAsync(async (request , _) => {
+            switch (request.Type)
+            {
+                case ElementType.Map: 
+                    return await validations.IsMapValid((int)request.MapId);
+                case ElementType.Navigation:
+                    return await validations.IsMapValid((int)request.DestinationViewId);
+                default:
+                    return true;
+            }
+        }).WithMessage("Nie można edytować cudzych danych");
+    }
+} 

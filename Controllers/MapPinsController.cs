@@ -42,10 +42,10 @@ public class MapPinsController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Authorize]
-    public async Task<ActionResult> Delete(int id){
-        await _mapPinsService.Delete(id);
+    public async Task<ActionResult> Delete(DeleteMapPinRequest request){
+        await _mapPinsService.Delete(request.Id);
         return NoContent();
     }
 

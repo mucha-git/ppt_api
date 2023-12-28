@@ -21,7 +21,7 @@ public class ElementsController : BaseController
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult> GetElements(int id){
-        var result = await _elementsService.GetElements((int)Account.PilgrimageId, id);
+        var result = await _elementsService.GetElements(id);
         return Ok(result);
     }
 
@@ -46,10 +46,10 @@ public class ElementsController : BaseController
         return Ok(result);
     }*/
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Authorize]
-    public async Task<ActionResult> Delete(int id){
-        await _elementsService.Delete(id);
+    public async Task<ActionResult> Delete(DeleteElementRequest request){
+        await _elementsService.Delete(request.Id);
         return NoContent();
     }
 

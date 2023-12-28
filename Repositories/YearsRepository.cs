@@ -10,11 +10,12 @@ namespace WebApi.Repositories;
 public interface IYearsRepository
 {
     Task<IEnumerable<Years>> Get(int pilgrimageId);
-    Task<Years> GetById(int year);
+    Task<Years> GetById(int yearId);
     Task<Years> Create(Years model);
     Task<Years> Update(Years model);
     Task Delete(Years model);
     Task SaveYearToRedis(int yearId);
+    Task<Years> GetYearFromRedisById(int yearId);
 }
 
 public class YearsRepository : IYearsRepository
@@ -95,6 +96,19 @@ public class YearsRepository : IYearsRepository
         string recordKey = $"Year_{yearId}";
         await _cache.SetRecordAsync(recordKey, year);
         await _pilgrimageRepository.SavePilgrimageToRedis(year.PilgrimageId);
+    }
+
+    public async Task<Years> GetYearFromRedisById(int yearId)
+    {
+        Years year;
+        string recordKey = $"Year_{yearId}";
+        year = await _cache.GetRecordAsync<Years>(recordKey);
+        if (year is null) // Data not available in the Cache
+            {
+                year = await GetById(yearId);
+                await _cache.SetRecordAsync(recordKey, year);
+            }
+        return year;
     }
 
     private async Task ChangeActiveYear(int id, int pilgrimageId){

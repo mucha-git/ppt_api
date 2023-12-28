@@ -38,11 +38,11 @@ public class AutoMapperProfile : Profile
                 }
             ));
 
-        CreateMap<CreateViewRequest, Views>();
+        CreateMap<CreateViewRequest, Views>().ReverseMap();
 
         CreateMap<UpdateViewRequest, Views>();
 
-        CreateMap<CreateElementRequest, Elements>();
+        CreateMap<CreateElementRequest, Elements>().ReverseMap();
 
         CreateMap<UpdateElementRequest, Elements>();
 

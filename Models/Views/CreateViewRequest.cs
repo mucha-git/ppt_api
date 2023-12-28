@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 using WebApi.Helpers;
 
 namespace WebApi.Models.Views;
@@ -23,3 +24,14 @@ public class CreateViewRequest {
 
     public int? ViewId { get; set; }
 }
+
+public class CreateViewRequestValidator : AbstractValidator<CreateViewRequest> {
+    public CreateViewRequestValidator(IValidations validations) {
+        RuleFor( v => v.YearId).MustAsync(async (request , _) => {
+            return await validations.IsYearValid(request);
+        }).WithMessage("Nie można edytować cudzych danych");
+        RuleFor( v => v).MustAsync(async (request , _) => {
+            return request.ViewId == null || await validations.IsViewValid(request.YearId, (int)request.ViewId);
+        }).WithMessage("Nie można edytować cudzych danych");
+    }
+} 

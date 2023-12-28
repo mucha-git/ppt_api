@@ -19,7 +19,7 @@ public class ViewsController : BaseController
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult> GetViews(int id){
-        var result = await _viewsService.GetViews((int)Account.PilgrimageId, id);
+        var result = await _viewsService.GetViews(id);
         return Ok(result);
     }
 
@@ -37,10 +37,10 @@ public class ViewsController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Authorize]
-    public async Task<ActionResult> Delete(int id){
-        await _viewsService.Delete(id);
+    public async Task<ActionResult> Delete(DeleteViewRequest request){
+        await _viewsService.Delete(request.Id);
         return NoContent();
     }
 

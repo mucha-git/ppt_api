@@ -1,9 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using WebApi.Authorization;
 using WebApi.Factories;
 using WebApi.Helpers;
+using WebApi.Models.Years;
 using WebApi.Repositories;
 using WebApi.Services;
 
@@ -23,7 +28,8 @@ var builder = WebApplication.CreateBuilder(args);
     AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     services.AddCors();
     services.AddSignalR();
-    services.AddStackExchangeRedisCache(options => {
+    services.AddStackExchangeRedisCache(options =>
+    {
         options.Configuration = builder.Configuration.GetConnectionString("Redis");
         options.InstanceName = "Redis_pielgrzymka_";
     });
@@ -32,9 +38,11 @@ var builder = WebApplication.CreateBuilder(args);
         // serialize enums as strings in api responses (e.g. Role)
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     }).AddJsonOptions(x =>
-                {x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-                });
+                {
+                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
+
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     services.AddSwaggerGen(c =>
     {
@@ -80,15 +88,16 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IPilgrimagesService, PilgrimagesService>();
     services.AddScoped<IMapPinsService, MapPinsService>();
     services.AddScoped<IOneSignalService, OneSignalService>();
+    services.AddScoped<IValidations, Validations>();
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();
-    services.AddScoped<IYearsRepository, YearsRepository>();
-    services.AddScoped<IViewsRepository, ViewsRepository>();
-    services.AddScoped<IElementsRepository, ElementsRepository>();
-    services.AddScoped<IMapsRepository, MapsRepository>();
-    services.AddScoped<IPilgrimagesRepository, PilgrimagesRepository>();
-    services.AddScoped<IMapPinsRepository, MapPinsRepository>();
+    services.AddTransient<IYearsRepository, YearsRepository>();
+    services.AddTransient<IViewsRepository, ViewsRepository>();
+    services.AddTransient<IElementsRepository, ElementsRepository>();
+    services.AddTransient<IMapsRepository, MapsRepository>();
+    services.AddTransient<IPilgrimagesRepository, PilgrimagesRepository>();
+    services.AddTransient<IMapPinsRepository, MapPinsRepository>();
 
     // Factories
     services.AddScoped<IViewsFactory, ViewsFactory>();
@@ -100,7 +109,7 @@ var builder = WebApplication.CreateBuilder(args);
 }
 
 var app = builder.Build();
-    //app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 // migrate any database changes on startup (includes initial db creation)
 //using (var scope = app.Services.CreateScope())
 //{

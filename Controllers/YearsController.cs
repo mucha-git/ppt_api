@@ -30,15 +30,22 @@ public class YearsController : BaseController
     [Authorize(Role.Manager)]
     public async Task<ActionResult> Create(CreateYearRequest request){
         var result = await _yearsService.Create(request);
+        if(request.SourceYearId != null){
+            await Copy(new CopyYearRequest{ 
+                SourceYearId = (int)request.SourceYearId, 
+                DestinationYearId = result.Id, 
+                PilgrimageId = (int)Account.PilgrimageId
+            });
+        }
         return Ok(result);
     }
 
-    // [HttpPost("copy")]
-    // [Authorize(Role.Manager)]
-    // public async Task<ActionResult> Copy(CopyYearRequest request){
-    //     var result = await _yearsService.Copy(request);
-    //     return Ok(result);
-    // }
+    [HttpPost("copy")]
+    [Authorize]
+    public async Task<ActionResult> Copy(CopyYearRequest request){
+        var result = await _yearsService.Copy(request.SourceYearId, request.DestinationYearId);
+        return Ok(result);
+    }
 
     [HttpPut]
     [Authorize(Role.Manager)]
@@ -47,10 +54,10 @@ public class YearsController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Authorize(Role.Manager)]
-    public async Task<ActionResult> Delete(int id){
-        await _yearsService.Delete(id);
+    public async Task<ActionResult> Delete(DeleteYearRequest request){
+        await _yearsService.Delete(request.Id);
         return NoContent();
     }
 

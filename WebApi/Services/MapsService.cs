@@ -54,7 +54,7 @@ public class MapsService : IMapsService
 
     public async Task<Maps> Update(UpdateMapRequest request)
     {
-        var map = _mapper.Map<Maps>(request);
+        var map = _mapsFactory.Update(request);
         return await _mapsRepository.Update(map);
     }
 

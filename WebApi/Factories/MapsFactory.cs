@@ -8,6 +8,7 @@ namespace WebApi.Factories
     public interface IMapsFactory
     {
         Maps Create(CreateMapRequest model);
+        Maps Update(UpdateMapRequest model);
 
     }
 
@@ -25,6 +26,11 @@ namespace WebApi.Factories
         }
 
         public Maps Create(CreateMapRequest model)
+        {
+            var response = _mapper.Map<Maps>(model);
+            return response;
+        }
+        public Maps Update(UpdateMapRequest model)
         {
             var response = _mapper.Map<Maps>(model);
             return response;

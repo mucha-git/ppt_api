@@ -35,8 +35,14 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
 	</ItemGroup>
     <ItemGroup>
       <None Remove="Microsoft.EntityFrameworkCore.Tools" />
+    </ItemGroup>
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="WebApi.Moq\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="WebApi.Moq\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="WebApi.Moq\obj\WebApi.Moq.csproj.nuget.dgspec.json" />
     </ItemGroup>
 </Project>

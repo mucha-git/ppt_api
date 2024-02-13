@@ -19,6 +19,14 @@ public class DataContext : DbContext
     public DataContext(IConfiguration configuration, DbContextOptions<DataContext> options) : base(options)
     {
         Configuration = configuration;
+        
+    }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Years>()
+            .Property(b => b.ColumnsCount)
+            .HasDefaultValue(1);
     }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder options)

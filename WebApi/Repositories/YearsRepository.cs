@@ -1,9 +1,11 @@
 ﻿using System.Text.Json;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using WebApi.Entities;
 using WebApi.Helpers;
+using WebApi.Models.Years;
 
 namespace WebApi.Repositories;
 
@@ -15,7 +17,7 @@ public interface IYearsRepository
     Task<Years> Update(Years model);
     Task Delete(Years model);
     Task SaveYearToRedis(int yearId);
-    Task<Years> GetYearFromRedisById(int yearId);
+    Task<YearsDto> GetYearFromRedisById(int yearId);
 }
 
 public class YearsRepository : IYearsRepository
@@ -23,12 +25,14 @@ public class YearsRepository : IYearsRepository
     private readonly DataContext _context;
     private IDistributedCache _cache;
     private IPilgrimagesRepository _pilgrimageRepository;
+    private readonly IMapper _mapper;
 
-    public YearsRepository(DataContext context, IDistributedCache cache, IPilgrimagesRepository pilgrimageRepository)
+    public YearsRepository(DataContext context, IDistributedCache cache, IPilgrimagesRepository pilgrimageRepository, IMapper mapper)
     {
         _context = context;
         _cache = cache;
         _pilgrimageRepository = pilgrimageRepository;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<Years>> Get(int pilgrimageId)
@@ -98,17 +102,18 @@ public class YearsRepository : IYearsRepository
         await _pilgrimageRepository.SavePilgrimageToRedis(year.PilgrimageId);
     }
 
-    public async Task<Years> GetYearFromRedisById(int yearId)
+    public async Task<YearsDto> GetYearFromRedisById(int yearId)
     {
-        Years year;
+        YearsDto yearDto;
         string recordKey = $"Year_{yearId}";
-        year = await _cache.GetRecordAsync<Years>(recordKey);
-        if (year is null) // Data not available in the Cache
+        yearDto = await _cache.GetRecordAsync<YearsDto>(recordKey);
+        if (yearDto is null) // Data not available in the Cache
             {
-                year = await GetById(yearId);
-                await _cache.SetRecordAsync(recordKey, year);
+                var year = await GetById(yearId);
+                yearDto = _mapper.Map<YearsDto>(year);
+                await _cache.SetRecordAsync(recordKey, yearDto);
             }
-        return year;
+        return yearDto;
     }
 
     private async Task ChangeActiveYear(int id, int pilgrimageId){

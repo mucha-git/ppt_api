@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using WebApi.Helpers;
 
 namespace WebApi.Entities;
@@ -30,7 +29,6 @@ public class Views
 
     public int? ViewId { get; set; }
     public Views View { get; set; } 
-    [JsonIgnore]
     public IEnumerable<Views> ViewsList { get; set; }
 
     //public IEnumerable<Elements> Elements { get; set; }

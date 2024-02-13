@@ -13,7 +13,7 @@ using WebApi.Repositories;
 
 public interface IYearsService
 {
-    Task<Years> GetDataForApp(int yearId);
+    Task<YearsDto> GetDataForApp(int yearId);
     Task<IEnumerable<Years>> GetYears(int pilgrimageId);
     Task<Years> Create(CreateYearRequest request);
     Task<Years> Update(UpdateYearRequest request);
@@ -46,7 +46,7 @@ public class YearsService : IYearsService
         _elementsService = elementsService;
     }
 
-    public async Task<Years> GetDataForApp(int yearId)
+    public async Task<YearsDto> GetDataForApp(int yearId)
     {
         return await _yearsRepository.GetYearFromRedisById(yearId);
     }

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Entities;
@@ -17,7 +18,9 @@ public class Years
 
     public Guid? Version { get; set; }
 
+    public int ColumnsCount { get; set; }
     public int PilgrimageId { get; set; }
+    
     public Pilgrimages Pilgrimage { get; set; }
 
     public IEnumerable<Views> Views { get; set; }

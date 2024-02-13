@@ -15,6 +15,7 @@ public class CreateYearRequest {
     public bool isActive {get; set;}
 
     public string ImgSrc { get; set; }
+    public int ColumnsCount { get; set; }
     [Required]
     public int PilgrimageId { get; set; }
 

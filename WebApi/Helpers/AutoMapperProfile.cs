@@ -63,5 +63,11 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdateElementRequest, UpdateViewRequest>()
             .ForMember( dest => dest.Type, src => src.MapFrom(m => m.ViewType))
             .ForMember( dest => dest.Id, src => src.MapFrom( m => m.DestinationViewId));
+
+        CreateMap<Years, YearsDto>();
+        CreateMap<Views, ViewsDto>();
+        CreateMap<Maps, MapsDto>();
+        CreateMap<MapPins, MapPinsDto>();
+        CreateMap<Elements, ElementsDto>();
     }
 }

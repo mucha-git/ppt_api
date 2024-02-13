@@ -30,13 +30,13 @@ public class Maps
     public IEnumerable<Markers> Markers { get { 
         var jsonOptions = new JsonSerializerOptions
             {
-                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                ReferenceHandler = ReferenceHandler.Preserve
             };
         return JsonSerializer.Deserialize<IEnumerable<Markers>>(MarkersString, jsonOptions);
             } set { 
                 var jsonOptions = new JsonSerializerOptions
             {
-                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                ReferenceHandler = ReferenceHandler.Preserve
             };
                 MarkersString = JsonSerializer.Serialize(value, jsonOptions);
             } }

@@ -65,7 +65,7 @@ public class Elements : IDivider, IGraphicAndText, IMap, INavigation, IYoutube
     public void SetValues(){
         var jsonOptions = new JsonSerializerOptions
             {
-                ReferenceHandler = ReferenceHandler.Preserve,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
         ElementValues ev = new ElementValues(){Color = Color, Margin = Margin, Height = Height, Text = Text, ImgSrc = ImgSrc, Autoplay = Autoplay, Playlist = Playlist, MapHeight = MapHeight, DestinationViewId = DestinationViewId};
@@ -75,7 +75,7 @@ public class Elements : IDivider, IGraphicAndText, IMap, INavigation, IYoutube
     public void SetPropsValues() {
         var jsonOptions = new JsonSerializerOptions
             {
-                ReferenceHandler = ReferenceHandler.Preserve,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
         var elementValues = JsonSerializer.Deserialize<ElementValues>(Values, jsonOptions);

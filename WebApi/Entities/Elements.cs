@@ -53,9 +53,11 @@ public class Elements : IDivider, IGraphicAndText, IMap, INavigation, IYoutube
 
     public int? Order { get; set; }
     public int ViewId { get; set; }
+    [JsonIgnore]
     public Views View { get; set; }
 
     public int YearId { get; set; }
+    [JsonIgnore]
     public Years Year { get; set; }
 
     // to jest zapisywane w bazie

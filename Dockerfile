@@ -13,7 +13,7 @@ COPY ["WebApi/WebApi.csproj", "WebApi/"]
 RUN dotnet restore "WebApi/WebApi.csproj"
 COPY . .
 #WORKDIR "/src/MT5_FULL_API"
-WORKDIR "/src/webApi"
+WORKDIR "/src/WebApi"
 RUN dotnet build "WebApi.csproj" -c Release -o /app/build
 
 FROM build AS publish

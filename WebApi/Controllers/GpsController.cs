@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("[controller]")]
 public class GpsController : BaseController
 {
-    private GpsDataRequest _gpsData;
+    private static GpsDataRequest _gpsData;
     
     [HttpGet]
     public ActionResult GetLocationData()

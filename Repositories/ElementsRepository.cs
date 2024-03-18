@@ -9,7 +9,7 @@ namespace WebApi.Repositories;
 
 public interface IElementsRepository
 {
-    Task<IEnumerable<Elements>> Get(int pilgrimageId, int id);
+    Task<IEnumerable<Elements>> Get(int yearId);
 
     Task<Elements> GetById(int id);
     Task<Elements> Create(Elements model);
@@ -45,14 +45,14 @@ public class ElementsRepository : IElementsRepository
         }
     }
 
-    public async Task<IEnumerable<Elements>> Get(int pilgrimageId, int id)
+    public async Task<IEnumerable<Elements>> Get(int yearId)
     {
         try
         {
-            var ret = await _context.Years
-                .Where(y => y.PilgrimageId == pilgrimageId && y.Id == id)
-                .Include(v => v.Elements.OrderBy(o => o.Order)).FirstOrDefaultAsync();
-            return ret == null ? null : ret.Elements;
+            var ret = await _context.Elements
+                .Where(y => y.YearId == yearId)
+                .OrderBy(o => o.Order).ToListAsync();
+            return ret;
         }
         catch (Exception e)
         {

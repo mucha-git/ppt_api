@@ -6,7 +6,7 @@ namespace WebApi.Repositories;
 
 public interface IMapsRepository
 {
-    Task<IEnumerable<Maps>> Get(int pilgrimageId, int id);
+    Task<IEnumerable<Maps>> Get(int yearId);
 
     Task<Maps> GetById(int id);
     Task<Maps> Create(Maps model);
@@ -30,12 +30,10 @@ public class MapsRepository : IMapsRepository
         return model;
     }
 
-    public async Task<IEnumerable<Maps>> Get(int pilgrimageId, int id)
+    public async Task<IEnumerable<Maps>> Get(int yearId)
     {
-        var ret = await _context.Years
-            .Where(y => y.PilgrimageId == pilgrimageId && y.Id == id)
-            .Include(v => v.Maps).FirstOrDefaultAsync();
-        return ret==null? null : ret.Maps;
+        var ret = await _context.Maps.Where( m => m.YearId == yearId).ToListAsync();
+        return ret;
     }
 
     public async Task<Maps> Update(Maps model)

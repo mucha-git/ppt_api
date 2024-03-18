@@ -6,6 +6,7 @@ using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models.OneSignal;
 using WebApi.Models.Pilgrimages;
+using WebApi.Models.Years;
 using WebApi.Services;
 
 [ApiController]
@@ -48,10 +49,10 @@ public class PilgrimagesController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Authorize(Role.Admin)]
-    public async Task<ActionResult> Delete(int id){
-        await _pilgrimagesService.Delete(id);
+    public async Task<ActionResult> Delete(DeletePilgrimageRequest request){
+        await _pilgrimagesService.Delete(request.Id);
         return NoContent();
     }
 

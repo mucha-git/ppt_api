@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 using WebApi.Entities;
 using WebApi.Helpers;
 
@@ -27,3 +28,11 @@ public class CreateMapRequest {
     [Required]
     public int YearId { get; set; }
 }
+
+public class CreateMapRequestValidator : AbstractValidator<CreateMapRequest> {
+    public CreateMapRequestValidator(IValidations validations) {
+        RuleFor( v => v.YearId).MustAsync(async (request , _) => {
+            return await validations.IsYearValid(request);
+        }).WithMessage("Nie można edytować cudzych danych");
+    }
+} 

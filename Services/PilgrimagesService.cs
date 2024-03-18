@@ -9,6 +9,7 @@ using WebApi.Repositories;
 public interface IPilgrimagesService
 {
     Task<IEnumerable<Pilgrimages>> GetPilgrimages(int? pilgrimageId);
+    Task<Pilgrimages> GetPilgrimageForApp(int pilgrimageId);
     Task<Pilgrimages> Create(CreatePilgrimageRequest request);
     Task<Pilgrimages> Update(UpdatePilgrimageRequest request);
 
@@ -50,6 +51,11 @@ public class PilgrimagesService : IPilgrimagesService
     public async Task<IEnumerable<Pilgrimages>> GetPilgrimages(int? pilgrimageId)
     {
         return await _pilgrimagesRepository.Get(pilgrimageId);
+    }
+
+    public async Task<Pilgrimages> GetPilgrimageForApp(int pilgrimageId)
+    {
+        return await _pilgrimagesRepository.GetPilgrimagesFromRedisById(pilgrimageId);
     }
 
     public async Task<Pilgrimages> Update(UpdatePilgrimageRequest request)

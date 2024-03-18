@@ -7,7 +7,7 @@ namespace WebApi.Repositories;
 
 public interface IViewsRepository
 {
-    Task<IEnumerable<Views>> Get(int pilgrimageId, int id);
+    Task<IEnumerable<Views>> Get(int yearId);
 
     Task<Views> GetById(int id);
     Task<Views> Create(Views model);
@@ -40,13 +40,12 @@ public class ViewsRepository : IViewsRepository
         }
     }
 
-    public async Task<IEnumerable<Views>> Get(int pilgrimageId, int id)
+    public async Task<IEnumerable<Views>> Get(int yearId)
     {
         try {
-        var ret = await _context.Years
-            .Where(y => y.PilgrimageId == pilgrimageId && y.Id == id)
-            .Include(v => v.Views.OrderBy(o => o.Order)).FirstOrDefaultAsync();
-        return ret==null? null : ret.Views;
+        var ret = await _context.Views
+            .Where(y => y.YearId == yearId).OrderBy(o => o.Order).ToListAsync();
+        return ret;
         } catch(Exception e) {
             throw new Exception( e.InnerException.Message);
         }

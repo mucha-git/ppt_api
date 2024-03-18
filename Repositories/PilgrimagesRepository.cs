@@ -14,6 +14,7 @@ public interface IPilgrimagesRepository
     Task<Pilgrimages> Update(Pilgrimages model);
     Task Delete(Pilgrimages model);
     Task SavePilgrimageToRedis(int pilgrimageId);
+    public Task<Pilgrimages> GetPilgrimagesFromRedisById(int pilgrimageId);
 }
 
 public class PilgrimagesRepository : IPilgrimagesRepository
@@ -63,8 +64,22 @@ public class PilgrimagesRepository : IPilgrimagesRepository
     }
 
     public async Task SavePilgrimageToRedis(int pilgrimageId){
-        var pilgrimage = await Get(pilgrimageId);
+        var pilgrimage = await _context.Pilgrimages
+            .Where(y => y.Id == pilgrimageId).Include(y => y.Years.OrderBy( o => o.Id)).ToListAsync();
         string recordKey = $"Pilgrimage_{pilgrimageId}";
         await _cache.SetRecordAsync(recordKey, pilgrimage.FirstOrDefault());
+    }
+
+    public async Task<Pilgrimages> GetPilgrimagesFromRedisById(int pilgrimageId){
+        Pilgrimages pilgrimage;
+        string recordKey = $"Pilgrimage_{pilgrimageId}";
+        pilgrimage = await _cache.GetRecordAsync<Pilgrimages>(recordKey);
+        if (pilgrimage is null) // Data not available in the Cache
+            {
+                pilgrimage = await _context.Pilgrimages.Where(e => e.Id == pilgrimageId).Include(y => y.Years.OrderBy( o => o.Id)).FirstOrDefaultAsync();
+                await _cache.SetRecordAsync(recordKey, pilgrimage);
+            }
+            
+        return pilgrimage;
     }
 }

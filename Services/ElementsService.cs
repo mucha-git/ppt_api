@@ -3,16 +3,18 @@ namespace WebApi.Services;
 using AutoMapper;
 using WebApi.Entities;
 using WebApi.Factories;
+using WebApi.Models;
 using WebApi.Models.Elements;
 using WebApi.Models.Views;
 using WebApi.Repositories;
 
 public interface IElementsService
 {
-    Task<IEnumerable<Elements>> GetElements(int pilgrimageId, int year);
+    Task<IEnumerable<Elements>> GetElements(int yearId);
     Task<Elements> Create(CreateElementRequest request);
     Task<Elements> Update(UpdateElementRequest request);
     Task<IEnumerable<Elements>> UpdateAll();
+    Task Copy(CopyElementsRequest request);
     Task Delete(int id);
 }
 
@@ -32,6 +34,34 @@ public class ElementsService : IElementsService
         _viewService = viewService;
         _elementsFactory = elementsFactory;
         _mapper = mapper;
+    }
+
+    public async Task Copy(CopyElementsRequest request)
+    {
+        var changes = new List<ChangesResponse>();
+        var sourceElements = await _elementsRepository.Get(request.SourceYearId);
+        foreach (var element in sourceElements)
+        {
+            element.SetPropsValues();
+            var toCreate = _elementsFactory.Create(_mapper.Map<CreateElementRequest>(element));
+            toCreate.YearId = request.DestinationYearId;
+            toCreate.ViewId = request.ViewsChanges.First(v => v.SourceId == toCreate.ViewId).DestinationId;
+            switch (toCreate.Type)
+            {
+                case Helpers.ElementType.Map: 
+                    toCreate.MapId = request.MapsChanges.First(m => m.SourceId == toCreate.MapId).DestinationId;
+                    toCreate.Map = null;
+                    break;
+                case Helpers.ElementType.Navigation:
+                    toCreate.DestinationViewId = request.ViewsChanges.First(v => v.SourceId == toCreate.DestinationViewId).DestinationId;
+                    break;
+                case Helpers.ElementType.View:
+                    toCreate.DestinationViewId = request.ViewsChanges.First(v => v.SourceId == toCreate.DestinationViewId).DestinationId;
+                    break;
+            }
+            toCreate.SetValues();
+            await _elementsRepository.Create(toCreate);
+        }
     }
 
     public async Task<Elements> Create(CreateElementRequest request)
@@ -57,9 +87,9 @@ public class ElementsService : IElementsService
         }
     }
 
-    public async Task<IEnumerable<Elements>> GetElements(int pilgrimageId, int year)
+    public async Task<IEnumerable<Elements>> GetElements(int yearId)
     {
-        var ev = await _elementsRepository.Get(pilgrimageId, year);
+        var ev = await _elementsRepository.Get(yearId);
     foreach (var item in ev)
     {
         item.SetPropsValues();

@@ -19,7 +19,7 @@ public class MapsController : BaseController
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult> GetMaps(int id){
-        var result = await _mapsService.GetMaps((int)Account.PilgrimageId, id);
+        var result = await _mapsService.GetMaps(id);
         return Ok(result);
     }
     [AllowAnonymous]
@@ -43,10 +43,10 @@ public class MapsController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Authorize]
-    public async Task<ActionResult> Delete(int id){
-        await _mapsService.Delete(id);
+    public async Task<ActionResult> Delete(DeleteMapRequest request){
+        await _mapsService.Delete(request.Id);
         return NoContent();
     }
 

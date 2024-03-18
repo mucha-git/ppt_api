@@ -4,25 +4,15 @@ using WebApi.Helpers;
 
 namespace WebApi.Models.MapPins;
 
-public class UpdateMapPinRequest
-{
+public class DeleteMapPinRequest {
     [Required]
-    public int Id { get; set; }
+    public int Id {get; set;}
     [Required]
-    public string Name { get; set; }
-    [Required]
-    public string PinSrc { get; set; }
-    public string IconSrc { get; set; }
-    [Required]
-    public int Width { get; set; }
-    [Required]
-    public int Height { get; set; }
-    [Required]
-    public int YearId { get; set; }
+    public int YearId {get; set;}
 }
 
-public class UpdateMapPinRequestValidator : AbstractValidator<UpdateMapPinRequest> {
-    public UpdateMapPinRequestValidator(IValidations validations) {
+public class DeleteMapPinRequestValidator : AbstractValidator<DeleteMapPinRequest> {
+    public DeleteMapPinRequestValidator(IValidations validations) {
         RuleFor( v => v.YearId).MustAsync(async (request , _) => {
             return await validations.IsYearValid(request);
         }).WithMessage("Nie można edytować cudzych danych");

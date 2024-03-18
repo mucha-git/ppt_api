@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using WebApi.Entities;
@@ -43,6 +44,10 @@ public class YearsRepository : IYearsRepository
                 year.Views = await _context.Views.Where( w => w.YearId == yearId).OrderBy(o => o.Order).ToListAsync();
                 year.MapPins = await _context.MapPins.Where( mp => mp.YearId == yearId).ToListAsync();
                 year.Maps = await _context.Maps.Where( m => m.YearId == yearId ).ToListAsync();
+                foreach (var element in year.Elements)
+                {
+                    element.SetPropsValues();
+                }
             }
 
         // Years y2 = await _context.Years

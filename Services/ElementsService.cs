@@ -12,7 +12,7 @@ public interface IElementsService
     Task<IEnumerable<Elements>> GetElements(int pilgrimageId, int year);
     Task<Elements> Create(CreateElementRequest request);
     Task<Elements> Update(UpdateElementRequest request);
-
+    Task<IEnumerable<Elements>> UpdateAll();
     Task Delete(int id);
 }
 
@@ -43,7 +43,8 @@ public class ElementsService : IElementsService
             request.DestinationViewId = view.Id;
         }
         var element = _elementsFactory.Create(request);
-        if (element.mapHeight == 0) element.mapHeight = null;
+        if (element.MapHeight == 0) element.MapHeight = null;
+        element.SetValues();
         return await _elementsRepository.Create(element);
     }
 
@@ -58,7 +59,12 @@ public class ElementsService : IElementsService
 
     public async Task<IEnumerable<Elements>> GetElements(int pilgrimageId, int year)
     {
-        return await _elementsRepository.Get(pilgrimageId, year);
+        var ev = await _elementsRepository.Get(pilgrimageId, year);
+    foreach (var item in ev)
+    {
+        item.SetPropsValues();
+    }
+        return ev;
     }
 
     public async Task<Elements> Update(UpdateElementRequest request)
@@ -70,7 +76,14 @@ public class ElementsService : IElementsService
             request.DestinationViewId = view.Id;
         }
         var element = _mapper.Map<Elements>(request);
-        if (element.mapHeight == 0) element.mapHeight = null;
+        if (element.MapHeight == 0) element.MapHeight = null;
+        element.SetValues();
         return await _elementsRepository.Update(element);
+    }
+
+    public async Task<IEnumerable<Elements>> UpdateAll()
+    {
+        var elements = await _elementsRepository.UpdateAll();
+        return elements;
     }
 }

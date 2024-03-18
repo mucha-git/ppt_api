@@ -31,7 +31,7 @@ public class UpdateElementRequest {
     #region Map
     //public string MapSrc { get; set; }
 
-    public int? mapHeight { get; set; }
+    public int? MapHeight { get; set; }
     
     public int? MapId { get; set; }
     #endregion

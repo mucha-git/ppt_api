@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using WebApi.Entities;
 using WebApi.Helpers;
+using WebApi.Models.Years;
 
 namespace WebApi.Models.Pilgrimages;
 
@@ -11,4 +12,5 @@ public class CreatePilgrimageRequest {
     public bool isActive {get; set;}
 
     public string LogoSrc { get; set; }
+    public List<CreateYearRequest> Years {get; set;}
 }

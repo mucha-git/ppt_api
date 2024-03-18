@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.Helpers;
@@ -11,13 +12,15 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230525121649_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -34,7 +37,7 @@ namespace WebApi.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(255)");
@@ -49,7 +52,7 @@ namespace WebApi.Migrations
                         .HasColumnType("varchar(1000)");
 
                     b.Property<DateTime?>("PasswordReset")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("PilgrimageId")
                         .HasColumnType("integer");
@@ -61,7 +64,7 @@ namespace WebApi.Migrations
                         .HasColumnType("varchar(1000)");
 
                     b.Property<DateTime?>("ResetTokenExpires")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer");
@@ -70,13 +73,13 @@ namespace WebApi.Migrations
                         .HasColumnType("varchar(80)");
 
                     b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("VerificationToken")
                         .HasColumnType("varchar(1000)");
 
                     b.Property<DateTime?>("Verified")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -112,22 +115,46 @@ namespace WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool?>("Autoplay")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("DestinationViewId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImgSrc")
+                        .HasColumnType("varchar(1000)");
+
                     b.Property<int?>("MapId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Margin")
                         .HasColumnType("integer");
 
                     b.Property<int?>("Order")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Playlist")
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
                     b.Property<int>("Type")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Values")
-                        .HasColumnType("text");
 
                     b.Property<int>("ViewId")
                         .HasColumnType("integer");
 
                     b.Property<int>("YearId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("mapHeight")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -382,13 +409,13 @@ namespace WebApi.Migrations
                                 .HasColumnType("integer");
 
                             b1.Property<DateTime>("Created")
-                                .HasColumnType("timestamp without time zone");
+                                .HasColumnType("timestamp with time zone");
 
                             b1.Property<string>("CreatedByIp")
                                 .HasColumnType("varchar(80)");
 
                             b1.Property<DateTime>("Expires")
-                                .HasColumnType("timestamp without time zone");
+                                .HasColumnType("timestamp with time zone");
 
                             b1.Property<string>("ReasonRevoked")
                                 .HasColumnType("varchar(80)");
@@ -397,7 +424,7 @@ namespace WebApi.Migrations
                                 .HasColumnType("varchar(1000)");
 
                             b1.Property<DateTime?>("Revoked")
-                                .HasColumnType("timestamp without time zone");
+                                .HasColumnType("timestamp with time zone");
 
                             b1.Property<string>("RevokedByIp")
                                 .HasColumnType("varchar(80)");

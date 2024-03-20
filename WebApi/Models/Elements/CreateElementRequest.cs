@@ -70,7 +70,7 @@ public class CreateElementRequestValidator : AbstractValidator<CreateElementRequ
                 case ElementType.Map: 
                     return await validations.IsMapValid((int)request.MapId);
                 case ElementType.Navigation:
-                    return await validations.IsMapValid((int)request.DestinationViewId);
+                    return await validations.IsViewValid(request.YearId, (int)request.DestinationViewId);
                 default:
                     return true;
             }

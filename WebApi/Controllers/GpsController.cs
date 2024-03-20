@@ -1,4 +1,4 @@
-﻿using WebApi.Models.Gps;
+using WebApi.Models.Gps;
 
 namespace WebApi.Controllers;
 
@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 public class GpsController : BaseController
 {
     private static GpsDataRequest _gpsData;
-    
+
     [HttpGet]
     public ActionResult GetLocationData()
     {
         return Ok(_gpsData);
     }
-    
+
     [HttpPost]
     public ActionResult SetLocationData(GpsDataRequest request)
     {

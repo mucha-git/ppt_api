@@ -16,9 +16,10 @@ public class GpsController : BaseController
         return Ok(_gpsData);
     }
 
-    [HttpPost]
-    public ActionResult SetLocationData(GpsDataRequest request)
+    [HttpGet("set")]
+    public ActionResult SetLocationData(int id)
     {
+        GpsDataRequest request = new GpsDataRequest {Id = id, Latitude = 345, Longitude = 567};
         _gpsData = request;
         return Ok(request);
     }

@@ -53,6 +53,10 @@ public class YearsRepository : IYearsRepository
                 {
                     element.SetPropsValues();
                 }
+                foreach (var view in year.Views)
+                {
+                    view.SetPropsValues();
+                }
             }
 
         // Years y2 = await _context.Years

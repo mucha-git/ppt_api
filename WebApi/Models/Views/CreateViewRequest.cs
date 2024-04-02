@@ -23,6 +23,7 @@ public class CreateViewRequest {
     public int YearId { get; set; }
 
     public int? ViewId { get; set; }
+    public bool IsSearchable { get; set; }
 }
 
 public class CreateViewRequestValidator : AbstractValidator<CreateViewRequest> {

@@ -25,6 +25,8 @@ public class UpdateViewRequest {
     public int YearId { get; set; }
 
     public int? ViewId { get; set; }
+    
+    public bool IsSearchable { get; set; }
 }
 
 public class UpdateViewRequestValidator : AbstractValidator<UpdateViewRequest> {

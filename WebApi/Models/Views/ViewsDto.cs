@@ -22,5 +22,7 @@ public class ViewsDto
     public int YearId { get; set; }
 
     public int? ViewId { get; set; }
+    
+    public bool IsSearchable { get; set; }
 
 }

@@ -316,6 +316,9 @@ namespace WebApi.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Values")
+                        .HasColumnType("text");
+
                     b.Property<int?>("ViewId")
                         .HasColumnType("integer");
 

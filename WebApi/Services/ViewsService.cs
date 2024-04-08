@@ -39,6 +39,7 @@ public class ViewsService : IViewsService
     public async Task<Views> Create(CreateViewRequest request)
     {
         var view = _viewsFactory.Create(request);
+        view.SetValues();
         return await _viewsRepository.Create(view);
     }
 
@@ -50,18 +51,26 @@ public class ViewsService : IViewsService
 
     public async Task<IEnumerable<Views>> GetViews(int yearId)
     {
-        return await _viewsRepository.Get(yearId);
+        var vv = await _viewsRepository.Get(yearId);
+        foreach (var item in vv)
+        {
+            item.SetPropsValues();
+        }
+
+        return vv;
     }
 
     public async Task<Views> Update(UpdateViewRequest request)
     {
         var view = _mapper.Map<Views>(request);
+        view.SetValues();
         return await _viewsRepository.Update(view);
     }
 
     private async Task<List<ChangesResponse>> CopyRecursive(IEnumerable<Views> sourceViews, List<ChangesResponse> changes, int destinationYearId, int? viewId){
         foreach (var view in sourceViews.Where(v => v.ViewId == viewId))
         {
+            view.SetPropsValues();
             var sourceId = view.Id;
             var toCreate = _viewsFactory.Create(_mapper.Map<CreateViewRequest>(view));
             toCreate.YearId = destinationYearId;
@@ -70,6 +79,7 @@ public class ViewsService : IViewsService
                 toCreate.ViewId = changes.First( v => v.SourceId == viewId).DestinationId;
                 //view.View = null;
             }
+            toCreate.SetValues();
             var newView = await _viewsRepository.Create(toCreate);
             changes.Add(new ChangesResponse{ SourceId = sourceId, DestinationId = newView.Id});
             changes = await CopyRecursive(sourceViews, changes, destinationYearId, sourceId);

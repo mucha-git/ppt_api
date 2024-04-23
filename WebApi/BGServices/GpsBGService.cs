@@ -5,13 +5,12 @@ namespace WebApi.BGServices;
 
 public class GpsBgService : BackgroundService
 {
-    private readonly IPilgrimagesRepository _pilgrimagesRepository;
-    private readonly IGpsRepository _gpsRepository;
-
-    public GpsBgService(IPilgrimagesRepository pilgrimagesRepository, IGpsRepository gpsRepository)
+    private readonly IServiceScopeFactory _serviceScopeGpsRepository;
+    private readonly IServiceScopeFactory _serviceScopePilgrimagesRepository; 
+    public GpsBgService( IServiceScopeFactory serviceScopePilgrimagesRepository, IServiceScopeFactory serviceScopeGpsRepository)
     {
-        _pilgrimagesRepository = pilgrimagesRepository;
-        _gpsRepository = gpsRepository;
+        _serviceScopePilgrimagesRepository = serviceScopePilgrimagesRepository;
+        _serviceScopeGpsRepository = serviceScopeGpsRepository;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,15 +24,19 @@ public class GpsBgService : BackgroundService
 
     private async Task DoServiceStuff()
     {
-        var pilgrimagesEnumerable = await _pilgrimagesRepository.Get(null);
+        using var scope = _serviceScopePilgrimagesRepository.CreateScope();
+        var pilgrimagesRepository = scope.ServiceProvider.GetRequiredService<IPilgrimagesRepository>(); 
+        var pilgrimagesEnumerable = await pilgrimagesRepository.Get(null);
         await IterateOverClientsListToSaveToRedis(pilgrimagesEnumerable);
     }
 
     private async Task IterateOverClientsListToSaveToRedis(IEnumerable<Pilgrimages> pilgrimagesEnumerable)
     {
+        using var scope = _serviceScopeGpsRepository.CreateScope();
+        var gpsRepository = scope.ServiceProvider.GetRequiredService<IGpsRepository>(); 
         foreach (var client in pilgrimagesEnumerable)
         {
-            await _gpsRepository.SaveClientDevicesToRedisById(client.Id);
+            if(client.GroupId is not null) await gpsRepository.SaveClientDevicesToRedisById((int)client.GroupId);
         }
     }
 }

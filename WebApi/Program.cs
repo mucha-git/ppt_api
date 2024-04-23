@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
     var env = builder.Environment;
 
     //services.AddDbContext<DataContext>();
+    
     services.AddDbContext<DataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
                               .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
 
@@ -91,7 +92,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IOneSignalService, OneSignalService>();
     services.AddScoped<IValidations, Validations>();
     services.AddScoped<IGpsService, GpsService>();
-    //services.AddHostedService<GpsBgService>();
+    
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();
@@ -110,6 +111,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IPilgrimagesFactory, PilgrimagesFactory>();
     services.AddScoped<IMapPinsFactory, MapPinsFactory>();
     services.AddScoped<IYearsFactory, YearsFactory>();
+    services.AddHostedService<GpsBgService>();
 }
 
 var app = builder.Build();

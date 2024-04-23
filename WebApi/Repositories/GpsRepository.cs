@@ -11,7 +11,7 @@ namespace WebApi.Repositories;
 public interface IGpsRepository
 {
     Task<IEnumerable<Devices>> GetById(int groupId);
-    Task SaveClientDevicesToRedisById(int clientId);
+    Task SaveClientDevicesToRedisById(int groupId);
     Task<IEnumerable<Devices>> GetClientDevicesFromRedisById(int clientId);
     Task<IEnumerable<Groups>> GetGroups();
 }

@@ -17,6 +17,7 @@ public class UpdatePilgrimageRequest {
     public string LogoSrc { get; set; }
     public string OneSignal {get; set;}
     public string OneSignalApiKey {get; set;}
+    public int? GroupId { get; set; }
 }
 
 public class UpdatePilgrimageRequestValidator : AbstractValidator<UpdatePilgrimageRequest> {

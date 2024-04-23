@@ -46,4 +46,5 @@ public class Maps
     //public IEnumerable<Elements> Elements { get; set; }
     public int YearId { get; set; }
     public Years Year { get; set; }
+    public int? DeviceId { get; set; }
 }

@@ -27,6 +27,7 @@ public class CreateMapRequest {
     //public IEnumerable<CreateCoordinateRequest> Polylines { get; set; }
     [Required]
     public int YearId { get; set; }
+    public int? DeviceId { get; set; }
 }
 
 public class CreateMapRequestValidator : AbstractValidator<CreateMapRequest> {

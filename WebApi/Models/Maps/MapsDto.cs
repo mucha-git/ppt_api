@@ -26,4 +26,5 @@ public class MapsDto
     public string Polylines { get; set; }
     
     public int YearId { get; set; }
+    public int? DeviceId { get; set; }
 }

@@ -12,5 +12,6 @@ public class CreatePilgrimageRequest {
     public bool isActive {get; set;}
 
     public string LogoSrc { get; set; }
+    public int? GroupId { get; set; }
     public List<CreateYearRequest> Years {get; set;}
 }

@@ -29,6 +29,8 @@ public class UpdateMapRequest {
     //public IEnumerable<CreateCoordinateRequest> Polylines { get; set; }
     [Required]
     public int YearId { get; set; }
+    
+    public int? DeviceId { get; set; }
 }
 
 public class UpdateMapRequestValidator : AbstractValidator<UpdateMapRequest> {

@@ -50,7 +50,13 @@ public class PilgrimagesService : IPilgrimagesService
 
     public async Task<IEnumerable<Pilgrimages>> GetPilgrimages(int? pilgrimageId)
     {
-        return await _pilgrimagesRepository.Get(pilgrimageId);
+        var response = await _pilgrimagesRepository.Get(pilgrimageId);
+        foreach (var pilgrimage in response)
+        {
+            pilgrimage.SetPropsValues();
+        }
+
+        return response;
     }
 
     public async Task<Pilgrimages> GetPilgrimageForApp(int pilgrimageId)
@@ -61,6 +67,7 @@ public class PilgrimagesService : IPilgrimagesService
     public async Task<Pilgrimages> Update(UpdatePilgrimageRequest request)
     {
         var pilgrimage = _mapper.Map<Pilgrimages>(request);
+        pilgrimage.SetValues();
         return await _pilgrimagesRepository.Update(pilgrimage);
     }
 }

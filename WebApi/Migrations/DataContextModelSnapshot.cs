@@ -185,6 +185,9 @@ namespace WebApi.Migrations
                     b.Property<double?>("Delta")
                         .HasColumnType("double precision");
 
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("integer");
+
                     b.Property<double>("Latitude")
                         .HasColumnType("double precision");
 
@@ -278,6 +281,9 @@ namespace WebApi.Migrations
 
                     b.Property<string>("OneSignalApiKey")
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Values")
+                        .HasColumnType("text");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("boolean");

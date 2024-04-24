@@ -36,6 +36,7 @@ public class GpsBgService : BackgroundService
         var gpsRepository = scope.ServiceProvider.GetRequiredService<IGpsRepository>(); 
         foreach (var client in pilgrimagesEnumerable)
         {
+            client.SetPropsValues();
             if(client.GroupId is not null) await gpsRepository.SaveClientDevicesToRedisById((int)client.GroupId);
         }
     }

@@ -94,7 +94,8 @@ public class MapsService : IMapsService
                 StrokeWidth = map.StrokeWidth,
                 YearId = request.DestinationYearId,
                 Markers = markers,
-                DeviceId = map.DeviceId
+                DeviceId = map.DeviceId,
+                PinId = map.PinId
             });
 
             var newMap = await _mapsRepository.Create(toCreate);

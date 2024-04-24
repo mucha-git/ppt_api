@@ -27,4 +27,6 @@ public class MapsDto
     
     public int YearId { get; set; }
     public int? DeviceId { get; set; }
+    
+    public int? PinId { get; set; }
 }

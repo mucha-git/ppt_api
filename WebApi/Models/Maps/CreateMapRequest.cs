@@ -28,6 +28,8 @@ public class CreateMapRequest {
     [Required]
     public int YearId { get; set; }
     public int? DeviceId { get; set; }
+    
+    public int? PinId { get; set; }
 }
 
 public class CreateMapRequestValidator : AbstractValidator<CreateMapRequest> {

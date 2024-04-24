@@ -47,4 +47,5 @@ public class Maps
     public int YearId { get; set; }
     public Years Year { get; set; }
     public int? DeviceId { get; set; }
+    public int? PinId { get; set; }
 }

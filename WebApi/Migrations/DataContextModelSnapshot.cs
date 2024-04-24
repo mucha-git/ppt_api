@@ -203,6 +203,9 @@ namespace WebApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<int?>("PinId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Polylines")
                         .HasColumnType("text");
 

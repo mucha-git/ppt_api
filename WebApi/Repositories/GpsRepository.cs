@@ -12,7 +12,7 @@ public interface IGpsRepository
 {
     Task<IEnumerable<Devices>> GetById(int groupId);
     Task SaveClientDevicesToRedisById(int groupId);
-    Task<IEnumerable<Devices>> GetClientDevicesFromRedisById(int clientId);
+    Task<Devices> GetClientDevicesFromRedisById(int deviceId);
     Task<IEnumerable<Groups>> GetGroups();
 }
 
@@ -34,15 +34,19 @@ public class GpsRepository : IGpsRepository
     
     public async Task SaveClientDevicesToRedisById(int groupId){
         var devicesEnumerable = await GetById(groupId);
-        var recordKey = $"ClientDevices_{groupId}";
-        await _cache.SetRecordAsync(recordKey, devicesEnumerable);
+        foreach (var device in devicesEnumerable)
+        {
+            var recordKey = $"ClientDevice_{device.Id}";
+            await _cache.SetRecordAsync(recordKey, device);
+        }
+        
     }
     
-    public async Task<IEnumerable<Devices>> GetClientDevicesFromRedisById(int groupId)
+    public async Task<Devices> GetClientDevicesFromRedisById(int deviceId)
     {
-        var recordKey = $"ClientDevices_{groupId}";
-        var devicesEnumerable = await _cache.GetRecordAsync<IEnumerable<Devices>>(recordKey);
-        return devicesEnumerable;
+        var recordKey = $"ClientDevice_{deviceId}";
+        var device = await _cache.GetRecordAsync<Devices>(recordKey);
+        return device;
     }
 
     public async Task<IEnumerable<Groups>> GetGroups()

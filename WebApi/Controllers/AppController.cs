@@ -43,7 +43,7 @@ public class AppController : BaseController
     [HttpPost("gps")]
     public async Task<ActionResult> GetGpsData(GetGpsRequest request)
     {
-        var clientDevices = await _gpsService.GetClientDevicesForApp(request.GroupId);
-        return Ok(clientDevices);
+        var clientDevice = await _gpsService.GetClientDevicesForApp(request.DeviceId);
+        return Ok(clientDevice);
     }
 }

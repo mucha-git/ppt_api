@@ -2,5 +2,5 @@ namespace WebApi.Models.Gps;
 
 public class GetGpsRequest
 {
-    public int GroupId { get; set; }
+    public int DeviceId { get; set; }
 }

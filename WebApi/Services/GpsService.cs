@@ -8,7 +8,7 @@ using AutoMapper;
 public interface IGpsService
 {
     Task<IEnumerable<Devices>> GetGpsByGroupId(int groupId);
-    Task<IEnumerable<Devices>> GetClientDevicesForApp(int groupId);
+    Task<Devices> GetClientDevicesForApp(int deviceId);
     Task<IEnumerable<Groups>> GetGroups();
 }
 
@@ -26,9 +26,9 @@ public class GpsService : IGpsService
         return await _gpsRepository.GetById(groupId);
     }
 
-    public async Task<IEnumerable<Devices>> GetClientDevicesForApp(int groupId)
+    public async Task<Devices> GetClientDevicesForApp(int deviceId)
     {
-        return await _gpsRepository.GetClientDevicesFromRedisById(groupId);
+        return await _gpsRepository.GetClientDevicesFromRedisById(deviceId);
     }
 
     public async Task<IEnumerable<Groups>> GetGroups()

@@ -188,6 +188,15 @@ namespace WebApi.Migrations
                     b.Property<int?>("DeviceId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("GpsNavigationColor")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GpsNavigationText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GpsTitle")
+                        .HasColumnType("text");
+
                     b.Property<double>("Latitude")
                         .HasColumnType("double precision");
 

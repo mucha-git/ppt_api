@@ -29,4 +29,7 @@ public class MapsDto
     public int? DeviceId { get; set; }
     
     public int? PinId { get; set; }
+    public string GpsTitle { get; set; }
+    public string GpsNavigationText { get; set; }
+    public string GpsNavigationColor { get; set; }
 }

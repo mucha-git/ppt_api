@@ -95,7 +95,10 @@ public class MapsService : IMapsService
                 YearId = request.DestinationYearId,
                 Markers = markers,
                 DeviceId = map.DeviceId,
-                PinId = map.PinId
+                PinId = map.DeviceId != null && map.PinId != null? request.MapPinsChanges.First(p => p.SourceId == map.PinId).DestinationId : null,
+                GpsTitle = map.GpsTitle,
+                GpsNavigationText = map.GpsNavigationText,
+                GpsNavigationColor = map.GpsNavigationColor
             });
 
             var newMap = await _mapsRepository.Create(toCreate);

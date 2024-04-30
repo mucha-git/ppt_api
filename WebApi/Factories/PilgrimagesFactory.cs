@@ -25,6 +25,7 @@ namespace WebApi.Factories
         public Pilgrimages Create(CreatePilgrimageRequest model)
         {
             var response = _mapper.Map<Pilgrimages>(model);
+            response.SetValues();
             return response;
         }
     }

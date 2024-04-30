@@ -185,6 +185,18 @@ namespace WebApi.Migrations
                     b.Property<double?>("Delta")
                         .HasColumnType("double precision");
 
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GpsNavigationColor")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GpsNavigationText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GpsTitle")
+                        .HasColumnType("text");
+
                     b.Property<double>("Latitude")
                         .HasColumnType("double precision");
 
@@ -199,6 +211,9 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)");
+
+                    b.Property<int?>("PinId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Polylines")
                         .HasColumnType("text");
@@ -278,6 +293,9 @@ namespace WebApi.Migrations
 
                     b.Property<string>("OneSignalApiKey")
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Values")
+                        .HasColumnType("text");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("boolean");

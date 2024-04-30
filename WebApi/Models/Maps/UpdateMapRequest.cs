@@ -29,6 +29,13 @@ public class UpdateMapRequest {
     //public IEnumerable<CreateCoordinateRequest> Polylines { get; set; }
     [Required]
     public int YearId { get; set; }
+    
+    public int? DeviceId { get; set; }
+    
+    public int? PinId { get; set; }
+    public string GpsTitle { get; set; }
+    public string GpsNavigationText { get; set; }
+    public string GpsNavigationColor { get; set; }
 }
 
 public class UpdateMapRequestValidator : AbstractValidator<UpdateMapRequest> {
@@ -39,5 +46,7 @@ public class UpdateMapRequestValidator : AbstractValidator<UpdateMapRequest> {
         RuleFor( v => v.Id).MustAsync(async (request , _) => {
             return await validations.IsMapValid(request);
         }).WithMessage("Nie można edytować cudzych danych");
+        RuleFor(v => v).Must((request, _) => request.DeviceId != null ? request.PinId != null : request.PinId == null)
+            .WithMessage("Nie mona wybrać urządzenia bez wybrania pinezki");
     }
 } 

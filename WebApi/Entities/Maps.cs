@@ -46,4 +46,9 @@ public class Maps
     //public IEnumerable<Elements> Elements { get; set; }
     public int YearId { get; set; }
     public Years Year { get; set; }
+    public int? DeviceId { get; set; }
+    public int? PinId { get; set; }
+    public string GpsTitle { get; set; }
+    public string GpsNavigationText { get; set; }
+    public string GpsNavigationColor { get; set; }
 }

@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using WebApi.Authorization;
+using WebApi.BGServices;
 using WebApi.Factories;
 using WebApi.Helpers;
 using WebApi.Models.Years;
@@ -20,11 +21,12 @@ var builder = WebApplication.CreateBuilder(args);
     var env = builder.Environment;
 
     //services.AddDbContext<DataContext>();
-    IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
+    
+    services.AddDbContext<DataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
                               .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
 
-    //services.AddDbContext<DataContextFirebird>(o => o.UseFirebird(builder.Configuration.GetConnectionString("WebApiDatabaseFirebird"))
-    //                          .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
+    services.AddDbContext<TraccarDataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("TraccarDatabase"))
+                              .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
     AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     services.AddCors();
     services.AddSignalR();
@@ -89,6 +91,8 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IMapPinsService, MapPinsService>();
     services.AddScoped<IOneSignalService, OneSignalService>();
     services.AddScoped<IValidations, Validations>();
+    services.AddScoped<IGpsService, GpsService>();
+    
 
     // Repositories
     services.AddScoped<IAccountRepository, AccountRepository>();
@@ -98,6 +102,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddTransient<IMapsRepository, MapsRepository>();
     services.AddTransient<IPilgrimagesRepository, PilgrimagesRepository>();
     services.AddTransient<IMapPinsRepository, MapPinsRepository>();
+    services.AddTransient<IGpsRepository, GpsRepository>();
 
     // Factories
     services.AddScoped<IViewsFactory, ViewsFactory>();
@@ -106,6 +111,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddScoped<IPilgrimagesFactory, PilgrimagesFactory>();
     services.AddScoped<IMapPinsFactory, MapPinsFactory>();
     services.AddScoped<IYearsFactory, YearsFactory>();
+    services.AddHostedService<GpsBgService>();
 }
 
 var app = builder.Build();

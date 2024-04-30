@@ -1,4 +1,7 @@
+using WebApi.Entities.Traccar;
+using WebApi.Helpers;
 using WebApi.Models.Gps;
+using WebApi.Services;
 
 namespace WebApi.Controllers;
 
@@ -8,18 +11,25 @@ using Microsoft.AspNetCore.Mvc;
 [Route("[controller]")]
 public class GpsController : BaseController
 {
-    private static GpsDataRequest _gpsData;
+    private readonly IGpsService _gpsService;
 
-    [HttpGet]
-    public ActionResult GetLocationData()
+    public GpsController(IGpsService gpsService)
     {
-        return Ok(_gpsData);
+        _gpsService = gpsService;
     }
 
-    [HttpPost]
-    public ActionResult SetLocationData(GpsDataRequest request)
+    [HttpGet("devices/{id:int}")]
+    public async Task<ActionResult> GetDevicesWithLocationData(int id)
     {
-        _gpsData = request;
-        return Ok(request);
+        var result = await _gpsService.GetGpsByGroupId(id);
+        return Ok(result);
+    }
+
+    [Authorize(Role.Admin)]
+    [HttpGet("groups")]
+    public async Task<ActionResult> GetGroups()
+    {
+        var result = await _gpsService.GetGroups();
+        return Ok(result);
     }
 }

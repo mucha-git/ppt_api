@@ -93,7 +93,12 @@ public class MapsService : IMapsService
                 StrokeColor = map.StrokeColor,
                 StrokeWidth = map.StrokeWidth,
                 YearId = request.DestinationYearId,
-                Markers = markers
+                Markers = markers,
+                DeviceId = map.DeviceId,
+                PinId = map.DeviceId != null && map.PinId != null? request.MapPinsChanges.First(p => p.SourceId == map.PinId).DestinationId : null,
+                GpsTitle = map.GpsTitle,
+                GpsNavigationText = map.GpsNavigationText,
+                GpsNavigationColor = map.GpsNavigationColor
             });
 
             var newMap = await _mapsRepository.Create(toCreate);

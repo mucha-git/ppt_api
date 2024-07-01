@@ -12,6 +12,9 @@ public class Devices
     [Column("name", TypeName = "varchar(128)")]
     public string Name { get; set; }
     
+    [Column("status", TypeName = "varchar(8)")]
+    public string Status { get; set; }
+    
     [Column("groupid")]
     public int GroupId { get; set; }
     
